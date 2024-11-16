@@ -59,7 +59,7 @@ public class Reportes extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("REPORTES\r\n");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Roboto Black", Font.BOLD, 54));
-		lblNewLabel_2.setBounds(138, 166, 330, 140);
+		lblNewLabel_2.setBounds(138, 156, 330, 140);
 		contentPane.add(lblNewLabel_2);
 		
 		JButton btnGenerarReporteDe = new JButton("Generar Reporte de Inventario");

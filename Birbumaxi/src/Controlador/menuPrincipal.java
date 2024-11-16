@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 import Modelo.EnviarEmailFactura;
 import Modelo.FacturaEnPDF;
 import Vista.Factura;
+import Vista.MenuGerente;
 import Vista.Ventas;
 
 //import Vista.MenuGerente;
