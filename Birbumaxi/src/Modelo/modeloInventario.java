@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class modeloInventario {
 
-    public void calcularEOQ() {
+    public static void calcularEOQ() {
         // Consulta para obtener todos los datos necesarios de la tabla productos
         String consulta = "SELECT id_producto, nombre, precio_compra,  producirOrdenar, MantenerInventario, Demanda FROM productos";
         conexionBD conec = new conexionBD();
@@ -33,6 +33,7 @@ public class modeloInventario {
                 double h = rs.getDouble("MantenerInventario");
                 double demanda = rs.getDouble("Demanda");
                 
+
                 
 
                 // Calcular EOQ utilizando la fórmula
@@ -43,7 +44,15 @@ public class modeloInventario {
                 double T = Q / d; // Tiempo de un ciclo de producción (años)
                 double N = d / Q; // Número de ciclos por año
                 double CTt = ((d * k) / Q) + (c*d) + ((h * Q) / 2); // Costo total por unidad de tiempo
+                double CTta = CTt * 12;
                 double CTcl = k + (c*Q) + ((h*(Q*Q))/(2*d)); // Costo total por ciclo
+                
+                
+
+                double L = Q / d;
+                double n = Math.floor(L / T);
+                double Le = L - (n*T);
+                double R = Le * d;
 
                 // Mostrar los datos en la consola
                 System.out.printf(
