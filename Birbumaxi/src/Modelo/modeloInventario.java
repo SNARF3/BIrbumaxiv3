@@ -39,7 +39,7 @@ public class modeloInventario {
                 double Q = Math.sqrt((2 * demanda * k) / h);
 
                 // Cálculo de métricas adicionales
-                double d = ((Q*Q)*H)/(2*k); // Demanda óptima se asume igual a la demanda anual
+                double d = ((Q*Q)*h)/(2*k); // Demanda óptima se asume igual a la demanda anual
                 double T = Q / d; // Tiempo de un ciclo de producción (años)
                 double N = d / Q; // Número de ciclos por año
                 double CTt = ((d * k) / Q) + (c*d) + ((h * Q) / 2); // Costo total por unidad de tiempo
