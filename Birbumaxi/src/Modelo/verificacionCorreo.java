@@ -18,8 +18,10 @@ public class verificacionCorreo {
 		Connection conn= conec.conexion();
 		PreparedStatement ps=null;
 		ResultSet rs=null;
-		String consulta= "SELECT ID_empleado, estado from empleados WHERE usuario='"+Correo+"';";
+		String consulta= "SELECT ID_empleado, estado from empleados WHERE usurario='"+Correo+"';";
+		System.out.println("hasta la primera consulta");
 		try {
+			System.out.println("entra al try");
 			ps=conn.prepareStatement(consulta);
 			rs=ps.executeQuery();
 			if(rs.next()) {
@@ -30,6 +32,7 @@ public class verificacionCorreo {
 				rs=ps.executeQuery();
 				if(rs.next()) {
 					password=rs.getString(1);
+					System.out.println(password);
 					if(contrasena.equals(password) && estado!=0) {
 						System.out.println(password+ "estado: "+ estado);
 						return true;
@@ -58,7 +61,7 @@ public class verificacionCorreo {
 		return false;
 	}
 	public boolean verificadorTipo(String correo) {
-	    String consulta = "SELECT cargo FROM empleados WHERE usuario=?";
+	    String consulta = "SELECT cargo FROM empleados WHERE usurario=?";
 	    
 	    try (Connection conn = conexionBD.conexion();
 	         PreparedStatement ps = conn.prepareStatement(consulta)) {
