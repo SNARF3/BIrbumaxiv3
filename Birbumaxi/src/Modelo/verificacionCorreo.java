@@ -18,7 +18,7 @@ public class verificacionCorreo {
 		Connection conn= conec.conexion();
 		PreparedStatement ps=null;
 		ResultSet rs=null;
-		String consulta= "SELECT ID_empleado, estado from empleados WHERE correo='"+Correo+"';";
+		String consulta= "SELECT ID_empleado, estado from empleados WHERE usuario='"+Correo+"';";
 		try {
 			ps=conn.prepareStatement(consulta);
 			rs=ps.executeQuery();
@@ -31,6 +31,7 @@ public class verificacionCorreo {
 				if(rs.next()) {
 					password=rs.getString(1);
 					if(contrasena.equals(password) && estado!=0) {
+						System.out.println(password+ "estado: "+ estado);
 						return true;
 					}else {
 						JOptionPane.showMessageDialog(null, "Contraseña incorrecta o la cuenta ya no es valida");
@@ -57,7 +58,7 @@ public class verificacionCorreo {
 		return false;
 	}
 	public boolean verificadorTipo(String correo) {
-	    String consulta = "SELECT cargo FROM empleados WHERE correo=?";
+	    String consulta = "SELECT cargo FROM empleados WHERE usuario=?";
 	    
 	    try (Connection conn = conexionBD.conexion();
 	         PreparedStatement ps = conn.prepareStatement(consulta)) {
@@ -68,6 +69,7 @@ public class verificacionCorreo {
 	        if (rs.next()) {
 	            String cargo = rs.getString("cargo");
 	            if (cargo.equals("2")) {
+	            	System.out.println(cargo);
 	                return true;
 	            }
 	        }

@@ -70,23 +70,28 @@ public class login extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 verificacionCorreo ver1= new verificacionCorreo();
                 String contrasena= new String(password.getPassword());
-                if(ver1.verificador(correo.getText(), contrasena)) {
-                    JOptionPane.showMessageDialog(null, "ingreso permitido");
-                    if(ver1.verificadorTipo(correo.getText())) {
-                    	MenuGerente ger = new MenuGerente();
-                    	ger.setVisible(true);
-                    	dispose();
-                    }else if(!ver1.verificadorTipo(correo.getText())) {
-                    	Ventas venta = new Ventas();
-                        venta.setVisible(true);
-                        dispose();
+                try {
+                    if(ver1.verificador(correo.getText(), contrasena)) {
+                        JOptionPane.showMessageDialog(null, "ingreso permitido");
+                        if(ver1.verificadorTipo(correo.getText())) {
+                        	MenuGerente ger = new MenuGerente();
+                        	ger.setVisible(true);
+                        	dispose();
+                        }else if(!ver1.verificadorTipo(correo.getText())) {
+                        	Ventas venta = new Ventas();
+                            venta.setVisible(true);
+                            dispose();
+                        }
+                        correo.setText("");
+                        password.setText("");
+               
+                    }else {
+                        JOptionPane.showMessageDialog(null, "ingreso denegado");
                     }
-                    correo.setText("");
-                    password.setText("");
-           
-                }else {
-                    JOptionPane.showMessageDialog(null, "ingreso denegado");
+                }catch(Exception error) {
+                	System.out.println(error);
                 }
+
                 correo.setText("");
                 password.setText("");
             }
