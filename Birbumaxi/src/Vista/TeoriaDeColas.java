@@ -28,7 +28,6 @@ public class TeoriaDeColas extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTextField textid;
-    private JTextField TextProducto;
     private JTextField textQ;
     private JTextField textD;
     private JTextField textT;
@@ -61,10 +60,10 @@ public class TeoriaDeColas extends JFrame {
 		lblNewLabel_1.setBounds(610, 0, 372, 663);
 		contentPane.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("TEORIA DE INVENTARIOS");
+		JLabel lblNewLabel_2 = new JLabel("TEORIA DE COLAS");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Roboto Black", Font.BOLD, 41));
-		lblNewLabel_2.setBounds(10, 0, 520, 83);
+		lblNewLabel_2.setBounds(113, 0, 361, 83);
 		contentPane.add(lblNewLabel_2);
 		
 		JButton btnCerrarSesion = new JButton("Atras");
@@ -93,7 +92,7 @@ public class TeoriaDeColas extends JFrame {
         
         JPanel panel = new JPanel();
         panel.setBackground(new Color(13, 71, 170));
-        panel.setBounds(10, 66, 564, 538);
+        panel.setBounds(20, 66, 564, 538);
         contentPane.add(panel);
         panel.setLayout(null);
         
@@ -101,47 +100,28 @@ public class TeoriaDeColas extends JFrame {
         textid.setForeground(Color.GRAY);
         textid.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
         textid.setColumns(10);
-        textid.setBounds(111, 54, 175, 29);
+        textid.setBounds(355, 23, 81, 37);
         panel.add(textid);
         
-        JLabel lblId = new JLabel("ID:");
-        lblId.setForeground(Color.WHITE);
-        lblId.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
-        lblId.setBounds(28, 54, 73, 29);
-        panel.add(lblId);
-        
-        JLabel lblDatosDelProducto = new JLabel("Datos del producto:");
+        JLabel lblDatosDelProducto = new JLabel("Numero de cajeros contratados:");
         lblDatosDelProducto.setForeground(Color.WHITE);
         lblDatosDelProducto.setFont(new Font("Roboto Medium", Font.BOLD, 21));
-        lblDatosDelProducto.setBounds(28, 10, 269, 29);
+        lblDatosDelProducto.setBounds(28, 26, 317, 29);
         panel.add(lblDatosDelProducto);
         
-        TextProducto = new JTextField();
-        TextProducto.setForeground(Color.GRAY);
-        TextProducto.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
-        TextProducto.setColumns(10);
-        TextProducto.setBounds(111, 100, 175, 29);
-        panel.add(TextProducto);
+        JButton btnSimular = new JButton("Simular");
+        btnSimular.setForeground(Color.WHITE);
+        btnSimular.setFont(new Font("Dialog", Font.BOLD, 18));
+        btnSimular.setFocusPainted(false);
+        btnSimular.setBorder(new LineBorder(new Color(7, 54, 127), 2));
+        btnSimular.setBackground(new Color(21, 101, 192));
+        btnSimular.setBounds(325, 117, 157, 44);
+        panel.add(btnSimular);
         
-        JLabel lblProducto = new JLabel("Producto:");
-        lblProducto.setForeground(Color.WHITE);
-        lblProducto.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
-        lblProducto.setBounds(28, 100, 81, 29);
-        panel.add(lblProducto);
-        
-        JButton btnBuscar = new JButton("Buscar");
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setFont(new Font("Dialog", Font.BOLD, 18));
-        btnBuscar.setFocusPainted(false);
-        btnBuscar.setBorder(new LineBorder(new Color(7, 54, 127), 2));
-        btnBuscar.setBackground(new Color(21, 101, 192));
-        btnBuscar.setBounds(320, 45, 157, 44);
-        panel.add(btnBuscar);
-        
-        JLabel lblResultados = new JLabel("Resultados:");
+        JLabel lblResultados = new JLabel("Simulacion:");
         lblResultados.setForeground(Color.WHITE);
         lblResultados.setFont(new Font("Roboto Medium", Font.BOLD, 21));
-        lblResultados.setBounds(28, 148, 269, 29);
+        lblResultados.setBounds(28, 65, 269, 29);
         panel.add(lblResultados);
         
         JLabel lblCantidadOptimaDe = new JLabel("Cantidad optima de pedido:");
@@ -314,10 +294,5 @@ public class TeoriaDeColas extends JFrame {
         lblUnidades_1_1_1.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
         lblUnidades_1_1_1.setBounds(432, 499, 106, 29);
         panel.add(lblUnidades_1_1_1);
-        
-        JButton calcular = new JButton("CALCULAR");
-        calcular.setBackground(Color.GRAY);
-        calcular.setBounds(330, 102, 120, 29);
-        panel.add(calcular);
     }
 }

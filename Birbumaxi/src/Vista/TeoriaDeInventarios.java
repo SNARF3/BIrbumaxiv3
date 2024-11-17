@@ -64,7 +64,7 @@ public class TeoriaDeInventarios extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("TEORIA DE INVENTARIOS");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Roboto Black", Font.BOLD, 41));
-		lblNewLabel_2.setBounds(10, 0, 520, 83);
+		lblNewLabel_2.setBounds(48, 0, 503, 83);
 		contentPane.add(lblNewLabel_2);
 		
 		JButton btnCerrarSesion = new JButton("Atras");
@@ -93,7 +93,7 @@ public class TeoriaDeInventarios extends JFrame {
         
         JPanel panel = new JPanel();
         panel.setBackground(new Color(13, 71, 170));
-        panel.setBounds(10, 66, 564, 538);
+        panel.setBounds(20, 66, 564, 538);
         contentPane.add(panel);
         panel.setLayout(null);
         
