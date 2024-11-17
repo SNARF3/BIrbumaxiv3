@@ -69,15 +69,20 @@ public class login extends JFrame {
         BotonIngresar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 verificacionCorreo ver1= new verificacionCorreo();
+                System.out.println("hasta aca si");
                 String contrasena= new String(password.getPassword());
                 try {
+                	System.out.println("abre el try");
                     if(ver1.verificador(correo.getText(), contrasena)) {
                         JOptionPane.showMessageDialog(null, "ingreso permitido");
+                        System.out.println("hasta el primer if si");
                         if(ver1.verificadorTipo(correo.getText())) {
+                        	System.out.println("hasta el segundo if si");
                         	MenuGerente ger = new MenuGerente();
                         	ger.setVisible(true);
                         	dispose();
                         }else if(!ver1.verificadorTipo(correo.getText())) {
+                        	System.out.println("hasta el primer else if si");
                         	Ventas venta = new Ventas();
                             venta.setVisible(true);
                             dispose();
@@ -86,6 +91,7 @@ public class login extends JFrame {
                         password.setText("");
                
                     }else {
+                    	System.out.println("hasta el xd");
                         JOptionPane.showMessageDialog(null, "ingreso denegado");
                     }
                 }catch(Exception error) {

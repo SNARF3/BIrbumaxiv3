@@ -41,7 +41,7 @@ public class MenuGerente extends JFrame {
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Roboto Black", Font.BOLD, 54));
 
-		lblNewLabel_2.setBounds(48, 134, 468, 128);
+		lblNewLabel_2.setBounds(10, 127, 468, 128);
 
 		lblNewLabel_2.setBounds(74, 135, 468, 192);
 
@@ -71,9 +71,9 @@ public class MenuGerente extends JFrame {
 		botonRealizarPedido.setBorder(new LineBorder(new Color(7, 54, 127), 2));
 		botonRealizarPedido.setBackground(new Color(21, 101, 192));
 
-		botonRealizarPedido.setBounds(73, 282, 422, 64);
+		botonRealizarPedido.setBounds(74, 280, 422, 51);
 
-		botonRealizarPedido.setBounds(74, 295, 422, 64);
+		botonRealizarPedido.setBounds(74, 280, 422, 64);
 
 		contentPane.add(botonRealizarPedido);
 		
@@ -93,7 +93,7 @@ public class MenuGerente extends JFrame {
 
 		botonSimularVentas.setBounds(73, 348, 422, 64);
 
-		botonSimularVentas.setBounds(74, 359, 422, 64);
+		botonSimularVentas.setBounds(74, 344, 422, 64);
 		botonSimularVentas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
 		contentPane.add(botonSimularVentas);
@@ -114,7 +114,7 @@ public class MenuGerente extends JFrame {
 
 		botonReportes.setBounds(73, 414, 422, 64);
 
-		botonReportes.setBounds(74, 422, 422, 64);
+		botonReportes.setBounds(74, 407, 422, 64);
 		botonReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
 		contentPane.add(botonReportes);
@@ -133,14 +133,12 @@ public class MenuGerente extends JFrame {
 		btnCerrarSesion.setBorder(new LineBorder(new Color(7, 54, 127), 2));
 		btnCerrarSesion.setBackground(new Color(21, 101, 192));
 
-		btnCerrarSesion.setBounds(73, 619, 143, 39);
+		btnCerrarSesion.setBounds(39, 609, 143, 39);
 		contentPane.add(btnCerrarSesion);
-		
-
-		btnCerrarSesion.setBounds(74, 585, 143, 39);
+		btnCerrarSesion.setBounds(74, 610, 143, 39);
 		btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		contentPane.add(btnCerrarSesion);
-		
+	
 
 		JButton botonAdmEmpleados = new JButton("Administrar Personal");
 		botonAdmEmpleados.addActionListener(new ActionListener() {
@@ -156,12 +154,44 @@ public class MenuGerente extends JFrame {
 		botonAdmEmpleados.setBorder(new LineBorder(new Color(7, 54, 127), 2));
 		botonAdmEmpleados.setBackground(new Color(21, 101, 192));
 
-		botonAdmEmpleados.setBounds(73, 544, 422, 64);
+		botonAdmEmpleados.setBounds(74, 545, 422, 64);
 
-		botonAdmEmpleados.setBounds(74, 486, 422, 64);
+		botonAdmEmpleados.setBounds(74, 471, 422, 64);
 		botonAdmEmpleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
 		contentPane.add(botonAdmEmpleados);
+		
+		JButton botonTeoriaInventarios = new JButton("Teoria de \r\ninventarios");
+		botonTeoriaInventarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TeoriaDeInventarios inv = new TeoriaDeInventarios();
+				inv.setVisible(true);
+				dispose();
+			}
+		});
+		botonTeoriaInventarios.setForeground(Color.WHITE);
+		botonTeoriaInventarios.setFont(new Font("Roboto Medium", Font.BOLD, 18));
+		botonTeoriaInventarios.setFocusPainted(false);
+		botonTeoriaInventarios.setBorder(new LineBorder(new Color(7, 54, 127), 2));
+		botonTeoriaInventarios.setBackground(new Color(21, 101, 192));
+		botonTeoriaInventarios.setBounds(74, 533, 207, 64);
+		botonTeoriaInventarios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		contentPane.add(botonTeoriaInventarios);
+		
+		JButton botonEstadisticas_1 = new JButton("Teoria de colas");
+		botonEstadisticas_1.setForeground(Color.WHITE);
+		botonEstadisticas_1.setFont(new Font("Roboto Medium", Font.BOLD, 18));
+		botonEstadisticas_1.setFocusPainted(false);
+		botonEstadisticas_1.setBorder(new LineBorder(new Color(7, 54, 127), 2));
+		botonEstadisticas_1.setBackground(new Color(21, 101, 192));
+		botonEstadisticas_1.setBounds(280, 533, 216, 64);
+		contentPane.add(botonEstadisticas_1);
+		btnCerrarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				login log = new login();
+				log.setVisible(true);
+				dispose();
+			}
+		});
 	}
-
 }
