@@ -3,82 +3,86 @@ package Modelo;
 import conexionBase.conexionBD;
 import java.sql.*;
 
-public class modeloInventario {
+// Clase EOQ
+public class EOQ {
+    private String nombre;
+    private double Q;
+    private double d;
+    private double T;
+    private double N;
+    private double CTt;
+    private double CTta;
+    private double CTcl;
+    private double R;
+    private double Le;
 
-    // Clase EOQ
-    public static class EOQ {
-        private double Q;
-        private double d;
-        private double T;
-        private double N;
-        private double CTt;
-        private double CTta;
-        private double CTcl;
-        private double R;
-        private double Le;
-
-        // Constructor
-        public EOQ(double Q, double d, double T, double N, double CTt, double CTta, double CTcl, double R, double Le) {
-            this.Q = Q;
-            this.d = d;
-            this.T = T;
-            this.N = N;
-            this.CTt = CTt;
-            this.CTta = CTta;
-            this.CTcl = CTcl;
-            this.R = R;
-            this.Le = Le;
-        }
-
-        // Getters
-        public double getQ() {
-            return Q;
-        }
-
-        public double getD() {
-            return d;
-        }
-
-        public double getT() {
-            return T;
-        }
-
-        public double getN() {
-            return N;
-        }
-
-        public double getCTt() {
-            return CTt;
-        }
-
-        public double getCTta() {
-            return CTta;
-        }
-
-        public double getCTcl() {
-            return CTcl;
-        }
-
-        public double getR() {
-            return R;
-        }
-
-        public double getLe() {
-            return Le;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Q: %.2f, d: %.2f, T: %.2f, N: %.2f, CTt: %.2f, CTta: %.2f, CTcl: %.2f, R: %.2f, Le: %.2f",
-                                 Q, d, T, N, CTt, CTta, CTcl, R, Le);
-        }
+    // Constructor
+    public EOQ(String nombre,double Q, double d, double T, double N, double CTt, double CTta, double CTcl, double R, double Le) {
+        this.nombre = nombre;
+        this.Q = Q;
+        this.d = d;
+        this.T = T;
+        this.N = N;
+        this.CTt = CTt;
+        this.CTta = CTta;
+        this.CTcl = CTcl;
+        this.R = R;
+        this.Le = Le;
     }
 
-    // Función para calcular EOQ
+    // Getters
+    public String getNombre() {
+        return nombre;
+    }
+
+    
+    public double getQ() {
+        return Q;
+    }
+
+    public double getD() {
+        return d;
+    }
+
+    public double getT() {
+        return T;
+    }
+
+    public double getN() {
+        return N;
+    }
+
+    public double getCTt() {
+        return CTt;
+    }
+
+    public double getCTta() {
+        return CTta;
+    }
+
+    public double getCTcl() {
+        return CTcl;
+    }
+
+    public double getR() {
+        return R;
+    }
+
+    public double getLe() {
+        return Le;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Q: %.2f, d: %.2f, T: %.2f, N: %.2f, CTt: %.2f, CTta: %.2f, CTcl: %.2f, R: %.2f, Le: %.2f",
+                             Q, d, T, N, CTt, CTta, CTcl, R, Le);
+    }
+
+// Función para calcular EOQ
     public static EOQ calcularEOQ(int idProductoParametro) {
         // Consulta para obtener los datos necesarios de la tabla productos dependiendo del id_producto
         String consulta = "SELECT id_producto, nombre, precio_compra, producirOrdenar, MantenerInventario, Demanda " +
-                          "FROM productos WHERE id_producto = ?";
+                        "FROM productos WHERE id_producto = ?";
         conexionBD conec = new conexionBD();
         Connection conn = conec.conexion();
         PreparedStatement ps = null;
@@ -110,13 +114,13 @@ public class modeloInventario {
                 double CTta = CTt * 12;
                 double CTcl = k + (c*Q) + ((h*(Q*Q))/(2*d)); // Costo total por ciclo
                 
-                double L = Q / d;
+                double L = 0.25;
                 double n = Math.floor(L / T);
                 double Le = L - (n*T);
                 double R = Le * d;
 
                 // Crear el objeto EOQ con los valores calculados
-                eoq = new EOQ(Q, d, T, N, CTt, CTta, CTcl, R, Le);
+                eoq = new EOQ(nombre, Q, d, T, N, CTt, CTta, CTcl, R, Le);
             }
 
         } catch (Exception e) {
@@ -133,6 +137,4 @@ public class modeloInventario {
         }
         return eoq;
     }
-
-
 }
