@@ -66,7 +66,7 @@ public class Pedidos extends JFrame {
     public static final JComboBox categ = new JComboBox(cat);
     public static final String[] columnas = {"ID", "Nombre"};
     public DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-    private JTextField textFechaVencimiento;
+    public static final JTextField textFechaVencimiento = new JTextField();
     /**
      * Create the frame.
      */
@@ -224,7 +224,6 @@ public class Pedidos extends JFrame {
                 contentPane.add(lblBusquedaPorId);
                 lblBusquedaPorId.setForeground(Color.WHITE);
                 lblBusquedaPorId.setFont(new Font("Roboto Light", Font.ITALIC, 18));
-                busqueda.setEditable(false);
                 
                 busqueda.setBackground(new Color(255, 255, 255));
                 busqueda.setBounds(539, 48, 166, 30);
@@ -369,14 +368,11 @@ public class Pedidos extends JFrame {
                 lblFechaDeVencimiento.setBounds(735, 210, 205, 29);
                 contentPane.add(lblFechaDeVencimiento);
                 
-                textFechaVencimiento = new JTextField();
                 textFechaVencimiento.setFont(new Font("Dialog", Font.BOLD, 21));
                 textFechaVencimiento.setColumns(10);
                 textFechaVencimiento.setBackground(Color.WHITE);
                 textFechaVencimiento.setBounds(941, 210, 126, 30);
                 contentPane.add(textFechaVencimiento);
-        
-
     }
    
     public static void revisarTipo() {
@@ -414,29 +410,54 @@ public class Pedidos extends JFrame {
         }
 }
  
-    
     public static boolean actualizarStock() {
-        String consulta = "UPDATE productos SET stock=? WHERE id_producto=?";
-        double stockNuevo = Double.parseDouble(stockAct.getText())+Double.parseDouble(StockReq.getText());
+        String consultaIDProveedor = 
+            "SELECT ID_proveedor FROM pedidosReporte WHERE ID_producto = ? LIMIT 1";
+
+
+        String consultaInsert = 
+            "INSERT INTO pedidosReporte (ID_producto, ID_proveedor, fecha, Fecha_Vencimiento, cantidad, Stock, Estado) " +
+            "VALUES (?, ?, NOW(), ?, ?, ?, ?)";
+
         conexionBD conec = new conexionBD();
         Connection conn = conec.conexion();
+
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try {
 
-        	ps=conn.prepareStatement(consulta);
-            ps.setDouble(1, stockNuevo);
-            ps.setInt(2, Integer.parseInt(productoSeleccionado));
-            int i=ps.executeUpdate();
-      	    if(i>0 ) {
-       	    	return true;
-      	    }else {
-       	    	return false;
-       	    }
- 
+        try {
+            // Paso 1: Obtener el ID_proveedor
+            ps = conn.prepareStatement(consultaIDProveedor);
+            ps.setInt(1, Integer.parseInt(productoSeleccionado)); // Asigna el ID_producto
+            rs = ps.executeQuery();
+
+            int idProveedor = -1;
+            if (rs.next()) {
+                idProveedor = rs.getInt("ID_proveedor"); // Extrae el ID_proveedor
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró un proveedor para el producto seleccionado.");
+                return false; // Si no se encuentra un proveedor, se cancela la operación
+            }
+
+            // Cierra el ResultSet y PreparedStatement para reusarlos
+            rs.close();
+            ps.close();
+
+            // Paso 2: Insertar en pedidosReporte
+            ps = conn.prepareStatement(consultaInsert);
+            ps.setInt(1, Integer.parseInt(productoSeleccionado)); // ID_producto
+            ps.setInt(2, idProveedor);                            // ID_proveedor
+            ps.setString(3, textFechaVencimiento.getText());                        // Fecha_Vencimiento
+            ps.setDouble(4, Double.parseDouble(StockReq.getText()));   // cantidad
+            ps.setDouble(5, Double.parseDouble(StockReq.getText()));   // Stock (igual a cantidad)
+            ps.setBoolean(6, true);                               // Estado
+
+            int filasInsertadas = ps.executeUpdate();
+            return filasInsertadas > 0;
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "No se pudo actualizar el stock");
+            JOptionPane.showMessageDialog(null, "No se pudo realizar el registro: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -449,36 +470,51 @@ public class Pedidos extends JFrame {
         return false;
     }
 
-	public static void buscar() {
-	    String sql = "SELECT id_producto, nombre, precio_compra, stock FROM productos WHERE id_producto=?";
-	    conexionBD conec = new conexionBD();
-	    PreparedStatement ps = null;
-	    ResultSet rs = null;
-	    Connection conn = conec.conexion();
-	    try {
-	        ps = conn.prepareStatement(sql);
-	        ps.setString(1, productoSeleccionado);
-	        rs = ps.executeQuery();
-	        if (rs.next()) {
-	        	busqueda.setText(rs.getString("id_producto"));
-	            nombre.setText(rs.getString("nombre"));
-	            precioCompra.setText(rs.getString("precio_compra"));
-	            stockAct.setText(rs.getString("stock"));
-	        } else {
-	            JOptionPane.showMessageDialog(null, "No se encontró al empleado");
-	        }
-	    } catch (Exception e) {
-	        System.out.println("Algo salió mal: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            if (ps != null) ps.close();
-	            if (conn != null) conn.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
-	}
+    public static void buscar() {
+        String sql = 
+            "SELECT productos.id_producto, productos.nombre, productos.precio_compra, " +
+            "(SELECT SUM(pedidosReporte.Stock) " +
+            " FROM pedidosReporte " +
+            " WHERE pedidosReporte.id_producto = productos.id_producto " +
+            " AND pedidosReporte.Estado = true) AS totalStock " +
+            "FROM productos " +
+            "WHERE productos.id_producto = ?";
+
+        conexionBD conec = new conexionBD();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = conec.conexion();
+
+        try {
+            // Preparar la consulta
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, productoSeleccionado); // Asignar el ID del producto
+            rs = ps.executeQuery();
+
+            // Procesar el resultado
+            if (rs.next()) {
+                // Actualizar los campos con los datos obtenidos
+                busqueda.setText(rs.getString("id_producto"));                // ID del producto
+                nombre.setText(rs.getString("nombre"));                       // Nombre del producto
+                precioCompra.setText(rs.getString("precio_compra"));          // Precio de compra
+                stockAct.setText(rs.getString("totalStock"));                 // Sumatoria del Stock
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el producto o no hay pedidos activos.");
+            }
+        } catch (Exception e) {
+            System.out.println("Algo salió mal: " + e.getMessage());
+        } finally {
+            try {
+                // Liberar recursos
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 	public static void calcularTotal() {
 	    String stockReqText = StockReq.getText().trim(); 
 	    
