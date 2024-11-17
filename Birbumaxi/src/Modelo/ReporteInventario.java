@@ -21,9 +21,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -65,7 +67,7 @@ public class ReporteInventario extends ReportePapa{
             espaciador.setSpacingBefore(10);
             document.add(espaciador);
 
-            PdfPTable table = new PdfPTable(4);
+            PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
 
             Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
@@ -74,15 +76,31 @@ public class ReporteInventario extends ReportePapa{
             addTableHeader(table, headerFont, "Categoría");
             addTableHeader(table, headerFont, "Nombre");
             addTableHeader(table, headerFont, "Stock");
+            addTableHeader(table, headerFont, "Fecha de Vencimiento");
             
             ArrayList<DatosInventario> inv = new ArrayList<>();
             inv = obtenerDatos();
             
             for(DatosInventario d : inv) {
-                addTableCell(table, "" + d.getNumero());
-                addTableCell(table, d.getCategoria());
-                addTableCell(table, d.getNombre());
-                addTableCell(table, "" + d.getStock());
+                LocalDate today = LocalDate.now();
+                LocalDate expiryDate = d.getFechaVencimiento();
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String formattedDate = d.getFechaVencimiento().format(formatter);
+                
+                if (expiryDate != null && !expiryDate.isBefore(today) && !expiryDate.isAfter(today.plusDays(7))) {
+                	addTableCellRed(table, "" + d.getNumero());
+                	addTableCellRed(table, d.getCategoria());
+                	addTableCellRed(table, d.getNombre());
+                	addTableCellRed(table, "" + d.getStock());
+                	addTableCellRed(table, formattedDate);
+                } else {
+                	addTableCell(table, "" + d.getNumero());
+                    addTableCell(table, d.getCategoria());
+                    addTableCell(table, d.getNombre());
+                    addTableCell(table, "" + d.getStock());
+                    addTableCell(table, formattedDate);
+                }
             }
 
             document.add(table);
@@ -125,7 +143,11 @@ public class ReporteInventario extends ReportePapa{
 	
 	private static ArrayList<DatosInventario> obtenerDatos (){
 		ArrayList<DatosInventario> inv = new ArrayList<>();
-		String consulta= "SELECT nombre, stock, categoria from productos ORDER BY categoria;";
+		String consulta= "SELECT nombre, stock, categoria, Fecha_Vencimiento\r\n"
+				+ "from productos, pedidosReporte\r\n"
+				+ "where productos.ID_producto = pedidosReporte.ID_producto\r\n"
+				+ "and pedidosReporte.Estado = true\r\n"
+				+ "ORDER BY categoria;";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
 		PreparedStatement ps= null;
@@ -140,7 +162,15 @@ public class ReporteInventario extends ReportePapa{
 				String categoria = cat[c];
 				String nombre = rs.getString("nombre");
 				double stock = Double.parseDouble(rs.getString("stock"));
-				DatosInventario datos = new DatosInventario(categoria, num, nombre, stock);
+				Date sqlDate = rs.getDate("Fecha_Vencimiento");
+                LocalDate localDate = sqlDate.toLocalDate();
+                System.out.println("Fecha: " + localDate);
+				DatosInventario datos = new DatosInventario(categoria, num, nombre, stock, localDate);
+				System.out.println("Numero: " + datos.getNumero());
+            	System.out.println("Categoria: " + datos.getCategoria());
+            	System.out.println("Nombre: " + datos.getNombre());
+            	System.out.println("Stock: " + datos.getStock());
+            	System.out.println("Fecha: " + datos.getFechaVencimiento());
 				inv.add(datos);
 				num++;
 			}
@@ -169,6 +199,12 @@ public class ReporteInventario extends ReportePapa{
     public void addTableCell(PdfPTable table, String text) {
     	// TODO Auto-generated method stub
     	super.addTableCell(table, text);
+    }
+    
+    @Override
+    public void addTableCellRed(PdfPTable table, String text) {
+    	// TODO Auto-generated method stub
+    	super.addTableCellRed(table, text);
     }
 	
 	

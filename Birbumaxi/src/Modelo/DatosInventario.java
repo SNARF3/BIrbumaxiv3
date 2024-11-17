@@ -1,8 +1,11 @@
 package Modelo;
 
+import java.time.LocalDate;
+
 public class DatosInventario extends DatosPadre{
 	public String categoria;
 	public double stock;
+	public LocalDate fechaVencimiento;
 	
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
@@ -45,9 +48,18 @@ public class DatosInventario extends DatosPadre{
 		return stock;
 	}
 	
-	public DatosInventario (String categoria, int numero, String nombre, double stock) {
+	public LocalDate getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+	
+	public void setFechaVencimiento(LocalDate fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
+	
+	public DatosInventario (String categoria, int numero, String nombre, double stock, LocalDate fechaVencimiento) {
 		super(numero, nombre);
 		this.categoria = categoria;
 		this.stock = stock;
+		this.fechaVencimiento = fechaVencimiento;
 	}
 }

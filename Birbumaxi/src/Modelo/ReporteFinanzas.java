@@ -161,7 +161,8 @@ public class ReporteFinanzas extends ReportePapa{
 			}
 			
 			consulta = "select sum(salario) as salarios\r\n"
-					+ "from empleados;";
+					+ "from empleados \r\n"
+					+ "where estado = true;";
 			ps=conn.prepareStatement(consulta);
 			rs=ps.executeQuery();
 			while(rs.next()) {
