@@ -11,6 +11,7 @@ import javax.swing.border.LineBorder;
 
 import Modelo.ReporteFinanzas;
 import Modelo.ReporteInventario;
+import Modelo.teoriaColas;
 
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
@@ -78,6 +79,8 @@ public class TeoriaDeColas extends JFrame {
         		dispose();
 			}
 		});
+
+
 		btnCerrarSesion.setForeground(Color.WHITE);
 		btnCerrarSesion.setFont(new Font("Roboto Medium", Font.BOLD, 15));
 		btnCerrarSesion.setFocusPainted(false);
@@ -106,6 +109,9 @@ public class TeoriaDeColas extends JFrame {
         cajeros.setColumns(10);
         cajeros.setBounds(355, 23, 81, 37);
         panel.add(cajeros);
+
+        teoriaColas teo = teoriaColas.calcularTeoriaColas();
+        
         
         JLabel lblDatosDelProducto = new JLabel("Numero de cajeros contratados:");
         lblDatosDelProducto.setForeground(Color.WHITE);
@@ -121,6 +127,15 @@ public class TeoriaDeColas extends JFrame {
         btnSimular.setBackground(new Color(21, 101, 192));
         btnSimular.setBounds(370, 92, 157, 44);
         panel.add(btnSimular);
+
+        
+		btnSimular.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                textT.setText(String.format("%.2f", teo.getS()));  // Demanda óptima
+                textFactorDeUtilizacion.setText(String.format("%.2f", teo.getRho()));  // Demanda óptima
+                
+			}
+		});
         
         JLabel lblResultados = new JLabel("Simulacion:");
         lblResultados.setForeground(Color.WHITE);
@@ -140,6 +155,8 @@ public class TeoriaDeColas extends JFrame {
         textT.setColumns(10);
         textT.setBounds(194, 101, 146, 29);
         panel.add(textT);
+
+        
         
         JLabel lblNumeroDeCiclos = new JLabel("Factor de utilizacion (ρ):");
         lblNumeroDeCiclos.setForeground(Color.WHITE);

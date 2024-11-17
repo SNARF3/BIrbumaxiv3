@@ -3,8 +3,9 @@ package Modelo;
 import conexionBase.conexionBD;
 import java.sql.*;
 
-public class TeoriaColas {
+public class teoriaColas {
 
+    // Atributos de la clase teoriaColas
     // Atributos de la clase teoriaColas
     private double tasaLlegada;
     private double tasaServicio;
@@ -17,13 +18,86 @@ public class TeoriaColas {
     private int s;
 
     // Constructor de la clase teoriaColas
-    public TeoriaColas(double tasaLlegada, double tasaServicio) {
+    public teoriaColas(double tasaLlegada, double tasaServicio) {
         this.tasaLlegada = tasaLlegada;
         this.tasaServicio = tasaServicio;
     }
 
+    // Getters y Setters
+    public double getTasaLlegada() {
+        return tasaLlegada;
+    }
+
+    public void setTasaLlegada(double tasaLlegada) {
+        this.tasaLlegada = tasaLlegada;
+    }
+
+    public double getTasaServicio() {
+        return tasaServicio;
+    }
+
+    public void setTasaServicio(double tasaServicio) {
+        this.tasaServicio = tasaServicio;
+    }
+
+    public double getRho() {
+        return rho;
+    }
+
+    public void setRho(double rho) {
+        this.rho = rho;
+    }
+
+    public double getPo() {
+        return po;
+    }
+
+    public void setPo(double po) {
+        this.po = po;
+    }
+
+    public double getLs() {
+        return Ls;
+    }
+
+    public void setLs(double Ls) {
+        this.Ls = Ls;
+    }
+
+    public double getLq() {
+        return Lq;
+    }
+
+    public void setLq(double Lq) {
+        this.Lq = Lq;
+    }
+
+    public double getWs() {
+        return Ws;
+    }
+
+    public void setWs(double Ws) {
+        this.Ws = Ws;
+    }
+
+    public double getWq() {
+        return Wq;
+    }
+
+    public void setWq(double Wq) {
+        this.Wq = Wq;
+    }
+
+    public int getS() {
+        return s;
+    }
+
+    public void setS(int s) {
+        this.s = s;
+    }
+
     // Método que aplica la teoría de colas dependiendo de la cantidad de cajeros
-    public static TeoriaColas calcularTeoriaColas() {
+    public static teoriaColas calcularTeoriaColas() {
         // Parámetros promedio de un supermercado
         double tasaLlegada = 10;  // tasa promedio de llegada de clientes por unidad de tiempo
         double tasaServicio = 12; // tasa promedio de servicio por cajero
@@ -34,7 +108,7 @@ public class TeoriaColas {
         Connection conn = conec.conexion();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        TeoriaColas teoria = null;
+        teoriaColas teoria = null;
 
         try {
             // Obtener el número de cajeros
@@ -47,7 +121,8 @@ public class TeoriaColas {
             }
 
             // Crear un objeto teoriaColas
-            teoria = new TeoriaColas(tasaLlegada, tasaServicio);
+            teoria = new teoriaColas(tasaLlegada, tasaServicio);
+            teoria.setS(totalCajeros);
 
             // Aplicar teoría de colas según el número de cajeros
             if (totalCajeros == 1) {
@@ -136,11 +211,24 @@ public class TeoriaColas {
     }
 
     // Función que calcula p(n)
-    public double calcularP(int n, int totalCajeros) {
-        double m = tasaLlegada / tasaServicio;
-        double rho = tasaLlegada / (totalCajeros * tasaServicio);
+    public double calcularP(int n, teoriaColas x) {
+        double m = x.getTasaLlegada() / x.getTasaServicio(); // Corregido con los métodos get
+        double p_n = 0;
+    
+        // Caso cuando hay solo un servidor (M/M/1)
+        if (x.getS() == 1) {
+            p_n = Math.pow(x.getRho(), n) * x.getPo(); // Usar Math.pow y métodos get
+        } 
+        // Caso cuando el número de clientes está entre 0 y el número de servidores (M/M/c)
+        else if (n >= 0 && n <= x.getS()) {
+            p_n = (Math.pow(m, n) * x.getPo()) / factorial(n); // Usar Math.pow y factorial
+        } 
+        // Caso cuando n es mayor que el número de servidores
+        else if (n > x.getS()) {
+            p_n = (Math.pow(m, x.getS()) * x.getPo()) / (factorial(x.getS()) * Math.pow(x.getS(), (n - x.getS()))); // Completar el cálculo
+        } 
 
-        double p_n = (Math.pow(m, n) / factorial(n)) * Math.pow(1 - rho, 2);
         return p_n;
     }
+    
 }
