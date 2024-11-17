@@ -27,7 +27,7 @@ public class TeoriaDeColas extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JTextField textid;
+    private JTextField cajeros;
     private JTextField textQ;
     private JTextField textD;
     private JTextField textT;
@@ -96,12 +96,12 @@ public class TeoriaDeColas extends JFrame {
         contentPane.add(panel);
         panel.setLayout(null);
         
-        textid = new JTextField();
-        textid.setForeground(Color.GRAY);
-        textid.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
-        textid.setColumns(10);
-        textid.setBounds(355, 23, 81, 37);
-        panel.add(textid);
+        cajeros = new JTextField();
+        cajeros.setForeground(Color.GRAY);
+        cajeros.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
+        cajeros.setColumns(10);
+        cajeros.setBounds(355, 23, 81, 37);
+        panel.add(cajeros);
         
         JLabel lblDatosDelProducto = new JLabel("Numero de cajeros contratados:");
         lblDatosDelProducto.setForeground(Color.WHITE);
@@ -115,7 +115,7 @@ public class TeoriaDeColas extends JFrame {
         btnSimular.setFocusPainted(false);
         btnSimular.setBorder(new LineBorder(new Color(7, 54, 127), 2));
         btnSimular.setBackground(new Color(21, 101, 192));
-        btnSimular.setBounds(325, 117, 157, 44);
+        btnSimular.setBounds(370, 173, 157, 44);
         panel.add(btnSimular);
         
         JLabel lblResultados = new JLabel("Simulacion:");
@@ -124,43 +124,43 @@ public class TeoriaDeColas extends JFrame {
         lblResultados.setBounds(28, 65, 269, 29);
         panel.add(lblResultados);
         
-        JLabel lblCantidadOptimaDe = new JLabel("Cantidad optima de pedido:");
+        JLabel lblCantidadOptimaDe = new JLabel("Contratar cajeros:");
         lblCantidadOptimaDe.setForeground(Color.WHITE);
         lblCantidadOptimaDe.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
-        lblCantidadOptimaDe.setBounds(28, 184, 226, 29);
+        lblCantidadOptimaDe.setBounds(28, 104, 226, 29);
         panel.add(lblCantidadOptimaDe);
         
         textQ = new JTextField();
         textQ.setForeground(Color.GRAY);
         textQ.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
         textQ.setColumns(10);
-        textQ.setBounds(281, 187, 146, 29);
+        textQ.setBounds(194, 104, 146, 29);
         panel.add(textQ);
         
-        JLabel lblDemandaOptima = new JLabel("Demanda Optima:");
+        JLabel lblDemandaOptima = new JLabel("Despedir cajeros:");
         lblDemandaOptima.setForeground(Color.WHITE);
         lblDemandaOptima.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
-        lblDemandaOptima.setBounds(28, 223, 226, 29);
+        lblDemandaOptima.setBounds(28, 143, 226, 29);
         panel.add(lblDemandaOptima);
         
         textD = new JTextField();
         textD.setForeground(Color.GRAY);
         textD.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
         textD.setColumns(10);
-        textD.setBounds(281, 226, 146, 29);
+        textD.setBounds(194, 143, 146, 29);
         panel.add(textD);
         
-        JLabel lblTiempoDeCiclo = new JLabel("Tiempo de ciclo de produccion:");
+        JLabel lblTiempoDeCiclo = new JLabel("Cajeros simulados:");
         lblTiempoDeCiclo.setForeground(Color.WHITE);
         lblTiempoDeCiclo.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
-        lblTiempoDeCiclo.setBounds(28, 262, 269, 29);
+        lblTiempoDeCiclo.setBounds(28, 182, 269, 29);
         panel.add(lblTiempoDeCiclo);
         
         textT = new JTextField();
         textT.setForeground(Color.GRAY);
         textT.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
         textT.setColumns(10);
-        textT.setBounds(281, 265, 146, 29);
+        textT.setBounds(194, 182, 146, 29);
         panel.add(textT);
         
         JLabel lblNumeroDeCiclos = new JLabel("Numero de ciclos al año:");
@@ -240,24 +240,6 @@ public class TeoriaDeColas extends JFrame {
         texttiempoespera.setColumns(10);
         texttiempoespera.setBounds(281, 499, 146, 29);
         panel.add(texttiempoespera);
-        
-        JLabel lblUnidadeslote = new JLabel("unidades/lote");
-        lblUnidadeslote.setForeground(Color.WHITE);
-        lblUnidadeslote.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
-        lblUnidadeslote.setBounds(432, 185, 106, 29);
-        panel.add(lblUnidadeslote);
-        
-        JLabel lblUnidades = new JLabel("unidades");
-        lblUnidades.setForeground(Color.WHITE);
-        lblUnidades.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
-        lblUnidades.setBounds(432, 224, 106, 29);
-        panel.add(lblUnidades);
-        
-        JLabel lblAociclo = new JLabel("año/ciclo");
-        lblAociclo.setForeground(Color.WHITE);
-        lblAociclo.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
-        lblAociclo.setBounds(432, 265, 106, 29);
-        panel.add(lblAociclo);
         
         JLabel lblCicloa = new JLabel("ciclo/año");
         lblCicloa.setForeground(Color.WHITE);

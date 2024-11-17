@@ -27,6 +27,7 @@ public class Panel5 extends JPanel {
 	public static final JComboBox tipo = new JComboBox(tipos);
 	public static final String[] productos = {"Frutas", "Verduras", "Carnes", "Lacteos", "Cereales", "Dulces", "Limpieza", "Aseo Personal"};
 	public static final JComboBox<String> comboBox = new JComboBox<>(productos);
+	private JTextField textFechaVencimiento;
 
 	/**
 	 * Create the panel.
@@ -153,8 +154,20 @@ public class Panel5 extends JPanel {
 		btnPedirNuevoProducto.setFocusPainted(false);
 		btnPedirNuevoProducto.setBorder(new LineBorder(new Color(7, 54, 127), 2));
 		btnPedirNuevoProducto.setBackground(new Color(21, 101, 192));
-		btnPedirNuevoProducto.setBounds(224, 242, 245, 46);
+		btnPedirNuevoProducto.setBounds(363, 243, 245, 46);
 		add(btnPedirNuevoProducto);
+		
+		JLabel lblFechaDeVencimiento = new JLabel("Fecha de vencimiento:");
+		lblFechaDeVencimiento.setForeground(Color.WHITE);
+		lblFechaDeVencimiento.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
+		lblFechaDeVencimiento.setBounds(10, 244, 206, 29);
+		add(lblFechaDeVencimiento);
+		
+		textFechaVencimiento = new JTextField();
+		textFechaVencimiento.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
+		textFechaVencimiento.setColumns(10);
+		textFechaVencimiento.setBounds(226, 243, 111, 30);
+		add(textFechaVencimiento);
 		
 
 

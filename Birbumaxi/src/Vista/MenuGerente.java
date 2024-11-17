@@ -178,14 +178,23 @@ public class MenuGerente extends JFrame {
 		botonTeoriaInventarios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		contentPane.add(botonTeoriaInventarios);
 		
-		JButton botonEstadisticas_1 = new JButton("Teoria de colas");
-		botonEstadisticas_1.setForeground(Color.WHITE);
-		botonEstadisticas_1.setFont(new Font("Roboto Medium", Font.BOLD, 18));
-		botonEstadisticas_1.setFocusPainted(false);
-		botonEstadisticas_1.setBorder(new LineBorder(new Color(7, 54, 127), 2));
-		botonEstadisticas_1.setBackground(new Color(21, 101, 192));
-		botonEstadisticas_1.setBounds(280, 533, 216, 64);
-		contentPane.add(botonEstadisticas_1);
+		JButton botonTeoriaDeColas = new JButton("Teoria de colas");
+		botonTeoriaDeColas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TeoriaDeColas col = new TeoriaDeColas();
+				col.setVisible(true);
+				dispose();
+			}
+		});
+		botonTeoriaDeColas.setForeground(Color.WHITE);
+		botonTeoriaDeColas.setFont(new Font("Roboto Medium", Font.BOLD, 18));
+		botonTeoriaDeColas.setFocusPainted(false);
+		botonTeoriaDeColas.setBorder(new LineBorder(new Color(7, 54, 127), 2));
+		botonTeoriaDeColas.setBackground(new Color(21, 101, 192));
+		botonTeoriaDeColas.setBounds(280, 533, 216, 64);
+		contentPane.add(botonTeoriaDeColas);
+		
+		
 		btnCerrarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				login log = new login();
