@@ -4,56 +4,60 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import conexionBase.conexionBD;
 
 public class carrito {
-	public DefaultTableModel carritos(String[] columnas, ArrayList<Double> cantidad, ArrayList<String> producto) {
-	    System.out.println("entra a la clase");
-	    DefaultTableModel model = new DefaultTableModel(null, columnas);
 
-	    if (cantidad.size() != producto.size()) {
-	        JOptionPane.showMessageDialog(null, "Las listas de productos y cantidades no coinciden en tamaño.");
-	        return model;
-	    }
+    public DefaultTableModel carritos(String[] columnas, Map<String, Double> productosConCantidad) {
+        System.out.println("Entra a la clase");
+        DefaultTableModel model = new DefaultTableModel(null, columnas);
 
-	    for (int i = 0; i < producto.size(); i++) {
-	        String consulta = "SELECT id_producto, nombre, precio_venta, tipo FROM productos WHERE id_producto = ?";
-	        conexionBD conec = new conexionBD();
-	        Connection conn = conec.conexion();
-	        String[] tabla = new String[4];
-	        PreparedStatement ps = null;
-	        ResultSet rs = null;
+        if (productosConCantidad == null || productosConCantidad.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay productos en el carrito.");
+            return model;
+        }
 
-	        try {
-	            ps = conn.prepareStatement(consulta);
-	            ps.setString(1, producto.get(i));
-	            rs = ps.executeQuery();
+        String consulta = "SELECT id_producto, nombre, precio_venta, tipo FROM productos WHERE id_producto = ?";
+        conexionBD conec = new conexionBD();
+        Connection conn = conec.conexion();
 
-	            if (rs.next()) {
-	                tabla[0] = rs.getString("id_producto");
-	                tabla[1] = rs.getString("nombre");
-	                tabla[2] = rs.getString("precio_venta");
-	                tabla[3] = String.valueOf(cantidad.get(i));
-	                model.addRow(tabla);
-	            }
-	        } catch (SQLException e) {
-	            JOptionPane.showMessageDialog(null, "No se pudo cargar la tabla: " + e.getMessage());
-	        } finally {
-	            try {
-	                if (rs != null) rs.close();
-	                if (ps != null) ps.close();
-	                if (conn != null) conn.close();
-	            } catch (SQLException ex) {
-	                ex.printStackTrace();
-	            }
-	        }
-	    }
+        if (conn == null) {
+            JOptionPane.showMessageDialog(null, "No se pudo establecer conexión con la base de datos.");
+            return model;
+        }
 
-	    return model;
-	}
+        try (PreparedStatement ps = conn.prepareStatement(consulta)) {
+            for (Map.Entry<String, Double> entry : productosConCantidad.entrySet()) {
+                String idProducto = entry.getKey();
+                Double cantidad = entry.getValue();
 
-    
+                ps.setString(1, idProducto);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String[] fila = new String[4];
+                        fila[0] = rs.getString("id_producto");
+                        fila[1] = rs.getString("nombre");
+                        fila[2] = rs.getString("precio_venta");
+                        fila[3] = String.valueOf(cantidad);
+                        model.addRow(fila);
+                    }
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Error al procesar producto " + idProducto + ": " + e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error en la consulta SQL: " + e.getMessage());
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return model;
+    }
 }
