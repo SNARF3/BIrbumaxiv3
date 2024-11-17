@@ -219,13 +219,13 @@ public class Pedidos extends JFrame {
                 lblNewLabel_3_1.setForeground(Color.WHITE);
                 lblNewLabel_3_1.setFont(new Font("Roboto Black", Font.BOLD, 27));
                 
-                JLabel lblBusquedaPorId = new JLabel("Busqueda por ID:");
-                lblBusquedaPorId.setBounds(360, 48, 157, 29);
+                JLabel lblBusquedaPorId = new JLabel("ID:");
+                lblBusquedaPorId.setBounds(487, 48, 30, 29);
                 contentPane.add(lblBusquedaPorId);
                 lblBusquedaPorId.setForeground(Color.WHITE);
                 lblBusquedaPorId.setFont(new Font("Roboto Light", Font.ITALIC, 18));
                 
-                busqueda.setBackground(new Color(255, 255, 255));
+                busqueda.setBackground(new Color(192, 192, 192));
                 busqueda.setBounds(539, 48, 166, 30);
                 contentPane.add(busqueda);
                 busqueda.setFont(new Font("Roboto Light", Font.BOLD, 21));
@@ -362,16 +362,16 @@ public class Pedidos extends JFrame {
                 calcular.setBounds(735, 250, 120, 29);
                 contentPane.add(calcular);
                 
-                JLabel lblFechaDeVencimiento = new JLabel("Fecha de vencimiento:");
+                JLabel lblFechaDeVencimiento = new JLabel("Fecha de vencimiento (AA/MM/DD):");
                 lblFechaDeVencimiento.setForeground(Color.WHITE);
                 lblFechaDeVencimiento.setFont(new Font("Dialog", Font.ITALIC, 18));
-                lblFechaDeVencimiento.setBounds(735, 210, 205, 29);
+                lblFechaDeVencimiento.setBounds(735, 180, 312, 29);
                 contentPane.add(lblFechaDeVencimiento);
                 
                 textFechaVencimiento.setFont(new Font("Dialog", Font.BOLD, 21));
                 textFechaVencimiento.setColumns(10);
                 textFechaVencimiento.setBackground(Color.WHITE);
-                textFechaVencimiento.setBounds(941, 210, 126, 30);
+                textFechaVencimiento.setBounds(783, 208, 183, 30);
                 contentPane.add(textFechaVencimiento);
     }
    
