@@ -11,6 +11,7 @@ import javax.swing.border.LineBorder;
 
 import Modelo.ReporteFinanzas;
 import Modelo.ReporteInventario;
+import Modelo.EOQ;
 
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
@@ -137,6 +138,31 @@ public class TeoriaDeInventarios extends JFrame {
         btnBuscar.setBackground(new Color(21, 101, 192));
         btnBuscar.setBounds(320, 45, 157, 44);
         panel.add(btnBuscar);
+
+        btnBuscar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int id = Integer.parseInt(textid.getText().trim()) ;  // Obtener el ID ingresado
+                if (id!=0) {
+                    EOQ producto = EOQ.calcularEOQ(id);  // Llamar a la función calcularEOQ con el ID
+                    // Mostrar los resultados en los campos de texto
+                    TextProducto.setText(producto.getNombre());  // Cantidad óptima de pedido
+                    textQ.setText(String.format("%.2f", producto.getQ()));  // Cantidad óptima de pedido
+                    textD.setText(String.format("%.2f", producto.getD()));  // Demanda óptima
+                    textT.setText(String.format("%.2f", producto.getT()));  // Tiempo de ciclo
+                    textCiclosanio.setText(String.format("%.2f", producto.getN()));  // Número de ciclos al año
+                    textcostociclo.setText(String.format("%.2f", producto.getCTcl()));  // Costo total por ciclo
+                    texttm.setText(String.format("%.2f", producto.getCTt()));  // Costo total por mes
+                    textta.setText(String.format("%.2f", producto.getCTta()));  // Costo total por año
+                    textreorden.setText(String.format("%.2f", producto.getR()));  // Costo total por año
+                    texttiempoespera.setText(String.format("%.2f", producto.getLe()));  // Costo total por año
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor ingrese un ID.");
+                }
+            }
+        });
+
+
+
         
         JLabel lblResultados = new JLabel("Resultados:");
         lblResultados.setForeground(Color.WHITE);
