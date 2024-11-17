@@ -60,7 +60,7 @@ public class TeoriaDeColas extends JFrame {
 
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Documentos\\imag\\imageninventario.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Documentos\\imag\\imagencolas.png"));
 		lblNewLabel_1.setBounds(610, 0, 372, 663);
 		contentPane.add(lblNewLabel_1);
 		
