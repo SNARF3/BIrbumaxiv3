@@ -320,7 +320,7 @@ public class Ventas extends JFrame {
         btnCerrarSesion.setBackground(new Color(51, 102, 255));
         
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(387, 11, 682, 290);
+        scrollPane.setBounds(387, 25, 682, 290);
         contentPane.add(scrollPane);
 
 

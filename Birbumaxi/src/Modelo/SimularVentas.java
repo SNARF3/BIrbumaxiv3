@@ -17,7 +17,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import conexionBase.conexionBD;
 
 public class SimularVentas {
-	
 	public void EmpezarSimulacion () {
         LocalDateTime fechaHoraAleatoria = generarFechaHoraAleatoria();
         String fchita = formatearFechaHora(fechaHoraAleatoria);
@@ -32,7 +31,6 @@ public class SimularVentas {
         bd = bd.setScale(2, RoundingMode.CEILING);
         fpdf.GenerarReporte(bd.doubleValue());
     }
-	
 	public static void simularCliente (int facturaID) {
 		int nit = generarNumeroAleatorioNit(6, 7);
 		ClienteFactura cf = new ClienteFactura("", "", nit);
@@ -46,7 +44,6 @@ public class SimularVentas {
 		int idCliente = cf.datosEncontrados();
 		cf.agregarFactura(facturaID, 1,idCliente);
 	}
-	
 	public static String SimularNombre () {
 		Random n = new Random();
 		String[] opciones = {"Alvarez",
@@ -71,7 +68,6 @@ public class SimularVentas {
 		String nombre = opciones[pos];
 		return nombre;
 	}
-	
 	public static String SimularCorreo (String nombre) {
 		String correo = nombre;
 		String[] simbolos = {
@@ -145,7 +141,6 @@ public class SimularVentas {
 		}
 		return total;
 	}
-	
 	public static double generarNumeroAleatorioTipo2(double min, double max) {
         int minInt = (int) Math.ceil(min);
         int maxInt = (int) Math.floor(max);
