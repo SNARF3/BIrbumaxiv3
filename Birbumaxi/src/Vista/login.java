@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Modelo.verificacionCorreo;
+import conexionBase.conexionBD;
 
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -16,6 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
 
 public class login extends JFrame {
@@ -26,6 +30,7 @@ public class login extends JFrame {
     private JPasswordField password;
 
     public login() {
+    	actualizarStock();
         setResizable(false);
         setType(Type.UTILITY);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -154,5 +159,28 @@ public class login extends JFrame {
             }
         });
     }
+    
+    private void actualizarStock () {
+    	String consulta = "CALL verificarFechas();";
+        conexionBD conec = new conexionBD();
+        Connection conn = conec.conexion();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(consulta);
+            rs = ps.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
 }
 
