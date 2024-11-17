@@ -64,9 +64,9 @@ public class teoriaColas {
         double Wq = tasaLlegada / (tasaServicio*(tasaServicio-tasaLlegada)); // Tiempo promedio en la cola
 
         System.out.printf("Utilización del servidor (ρ): %.2f%n", rho);
-        System.out.printf("Número promedio de clientes en el sistema (L): %.2f%n", L);
+        System.out.printf("Número promedio de clientes en el sistema (L): %.2f%n", Ls);
         System.out.printf("Número promedio de clientes en la cola (Lq): %.2f%n", Lq);
-        System.out.printf("Tiempo promedio en el sistema (W): %.2f%n", W);
+        System.out.printf("Tiempo promedio en el sistema (W): %.2f%n", Ws);
         System.out.printf("Tiempo promedio en la cola (Wq): %.2f%n", Wq);
     }
 
