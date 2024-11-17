@@ -119,6 +119,7 @@ public class TeoriaDeColas extends JFrame {
         lblDatosDelProducto.setBounds(28, 26, 317, 29);
         panel.add(lblDatosDelProducto);
         
+        // Configuración del botón "Simular"
         JButton btnSimular = new JButton("Simular");
         btnSimular.setForeground(Color.WHITE);
         btnSimular.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -128,14 +129,27 @@ public class TeoriaDeColas extends JFrame {
         btnSimular.setBounds(370, 92, 157, 44);
         panel.add(btnSimular);
 
-        
-		btnSimular.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-                textT.setText(String.format("%.2f", teo.getS()));  // Demanda óptima
-                textFactorDeUtilizacion.setText(String.format("%.2f", teo.getRho()));  // Demanda óptima
-                
-			}
-		});
+        // Acción al presionar el botón "Simular"
+        btnSimular.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (teo != null) {
+                    try {
+                        // Actualizar los campos de texto con los valores de `teo`
+                        textT.setText(String.format("%.2f", teo.getS())); // Número de servidores
+                        textFactorDeUtilizacion.setText(String.format("%.2f", teo.getRho())); // Factor de utilización
+                        textLq.setText(String.format("%.2f", teo.getLq())); // Número promedio de clientes en cola
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(panel, "Error al calcular los valores: " + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "El objeto teoría de colas no está inicializado.",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
         
         JLabel lblResultados = new JLabel("Simulacion:");
         lblResultados.setForeground(Color.WHITE);
