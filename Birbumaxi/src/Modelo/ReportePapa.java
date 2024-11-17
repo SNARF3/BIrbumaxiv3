@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Phrase;
@@ -38,6 +39,15 @@ public class ReportePapa {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
     }
+    
+    public void addTableCellRed(PdfPTable table, String text) {
+        PdfPCell cell = new PdfPCell();
+        cell.setPhrase(new Phrase(text));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.RED); // Establece el fondo rojo
+        table.addCell(cell);
+    }
+
     
     public void GenerarReporte() {
     	

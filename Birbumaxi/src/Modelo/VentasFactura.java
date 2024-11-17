@@ -22,7 +22,7 @@ public class VentasFactura {
 	
 
 	public int RealizarVenta(String fechaa) {
-		String consulta= "INSERT INTO factura (metodo_pago, persona_id_persona, total, fecha) values (1, 1, 0.0," + fechaa + ")";
+		String consulta= "INSERT INTO factura (metodo_pago, id_persona, total, fecha) values (1, 1, 0.0," + fechaa + ")";
 
 
 		conexionBD conec= new conexionBD();

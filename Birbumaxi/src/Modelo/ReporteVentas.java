@@ -60,10 +60,10 @@ public class ReporteVentas extends ReportePapa{
 	
 	public ArrayList<DatosVentas> obtenerDatos (LocalDate inicio, LocalDate fin){
 		ArrayList<DatosVentas> inv = new ArrayList<>();
-		String consulta = "select persona.nombre, persona.NIT, DATE(factura.fecha) AS fechita, factura.total "
-				+ "from persona, factura "
-				+ "where persona.id_persona = factura.persona_id_persona "
-				+ "and DATE(factura.fecha) >= ? and DATE(factura.fecha) <= ? "
+		String consulta = "select persona.nombre, persona.NIT, DATE(factura.fecha) AS fechita, factura.total \r\n"
+				+ "from persona, factura \r\n"
+				+ "where persona.id_persona = factura.id_persona\r\n"
+				+ "and DATE(factura.fecha) >= ? and DATE(factura.fecha) <= ?\r\n"
 				+ "order by fechita;";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
