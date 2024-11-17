@@ -5,26 +5,92 @@ import java.sql.*;
 
 public class modeloInventario {
 
-    public static void calcularEOQ() {
-        // Consulta para obtener todos los datos necesarios de la tabla productos
-        String consulta = "SELECT id_producto, nombre, precio_compra,  producirOrdenar, MantenerInventario, Demanda FROM productos";
+    // Clase EOQ
+    public static class EOQ {
+        private double Q;
+        private double d;
+        private double T;
+        private double N;
+        private double CTt;
+        private double CTta;
+        private double CTcl;
+        private double R;
+        private double Le;
+
+        // Constructor
+        public EOQ(double Q, double d, double T, double N, double CTt, double CTta, double CTcl, double R, double Le) {
+            this.Q = Q;
+            this.d = d;
+            this.T = T;
+            this.N = N;
+            this.CTt = CTt;
+            this.CTta = CTta;
+            this.CTcl = CTcl;
+            this.R = R;
+            this.Le = Le;
+        }
+
+        // Getters
+        public double getQ() {
+            return Q;
+        }
+
+        public double getD() {
+            return d;
+        }
+
+        public double getT() {
+            return T;
+        }
+
+        public double getN() {
+            return N;
+        }
+
+        public double getCTt() {
+            return CTt;
+        }
+
+        public double getCTta() {
+            return CTta;
+        }
+
+        public double getCTcl() {
+            return CTcl;
+        }
+
+        public double getR() {
+            return R;
+        }
+
+        public double getLe() {
+            return Le;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Q: %.2f, d: %.2f, T: %.2f, N: %.2f, CTt: %.2f, CTta: %.2f, CTcl: %.2f, R: %.2f, Le: %.2f",
+                                 Q, d, T, N, CTt, CTta, CTcl, R, Le);
+        }
+    }
+
+    // Función para calcular EOQ
+    public static EOQ calcularEOQ(int idProductoParametro) {
+        // Consulta para obtener los datos necesarios de la tabla productos dependiendo del id_producto
+        String consulta = "SELECT id_producto, nombre, precio_compra, producirOrdenar, MantenerInventario, Demanda " +
+                          "FROM productos WHERE id_producto = ?";
         conexionBD conec = new conexionBD();
         Connection conn = conec.conexion();
         PreparedStatement ps = null;
         ResultSet rs = null;
+        EOQ eoq = null;
 
         try {
             ps = conn.prepareStatement(consulta);
+            ps.setInt(1, idProductoParametro); // Pasamos el id_producto a la consulta
             rs = ps.executeQuery();
             
-            // Encabezado en la consola
-            System.out.printf(
-                "%-15s %-20s %-10s %-15s %-15s %-10s %-15s %-15s %-20s %-15s %-15s%n", 
-                "ID Producto", "Nombre", "Demanda", "Costo Ordenar", "Costo Mantener", "EOQ", 
-                "Demanda Óptima", "Tiempo Ciclo", "N° Ciclos al Año", "Costo Total UT", "Costo Total Ciclo");
-            System.out.println("---------------------------------------------------------------------------------------------------------------");
-
-            while (rs.next()) {
+            if (rs.next()) {
                 // Obtener valores de la base de datos
                 String idProducto = rs.getString("id_producto");
                 String nombre = rs.getString("nombre");
@@ -32,9 +98,6 @@ public class modeloInventario {
                 double k = rs.getDouble("producirOrdenar");
                 double h = rs.getDouble("MantenerInventario");
                 double demanda = rs.getDouble("Demanda");
-                
-
-                
 
                 // Calcular EOQ utilizando la fórmula
                 double Q = Math.sqrt((2 * demanda * k) / h);
@@ -47,22 +110,17 @@ public class modeloInventario {
                 double CTta = CTt * 12;
                 double CTcl = k + (c*Q) + ((h*(Q*Q))/(2*d)); // Costo total por ciclo
                 
-                
-
                 double L = Q / d;
                 double n = Math.floor(L / T);
                 double Le = L - (n*T);
                 double R = Le * d;
 
-                // Mostrar los datos en la consola
-                System.out.printf(
-                    "%-15s %-20s %-10.2f %-15.2f %-15.2f %-10.2f %-15.2f %-15.2f %-20.2f %-15.2f %-15.2f%n", 
-                    idProducto, nombre, demanda, k, h, Q, 
-                    d, T, N, CTt, CTcl);
+                // Crear el objeto EOQ con los valores calculados
+                eoq = new EOQ(Q, d, T, N, CTt, CTta, CTcl, R, Le);
             }
 
         } catch (Exception e) {
-            System.out.println("No se pudo cargar la tabla: " + e.getMessage());
+            System.out.println("Error al obtener datos de la base de datos: " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -73,5 +131,8 @@ public class modeloInventario {
                 ex.printStackTrace();
             }
         }
+        return eoq;
     }
+
+
 }
