@@ -532,8 +532,12 @@ public class Ventas extends JFrame {
 
 	}
     public static double stockCalculo() {
-        double stock = 0;
-        String consulta = "SELECT stock from productos WHERE id_producto=" + productoSeleccionado + ";";
+        double stock = 0.0;
+        String consulta = "select sum(stock) as st\r\n"
+        		+ "from pedidosReporte\r\n"
+        		+ "where ID_Producto = " + productoSeleccionado + "\r\n"
+        		+ "and Estado = true\r\n"
+        		+ "and stock > 0.0;";
         conexionBD conec = new conexionBD();
         Connection conn = conec.conexion();
         PreparedStatement ps = null;
@@ -542,7 +546,7 @@ public class Ventas extends JFrame {
             ps = conn.prepareStatement(consulta);
             rs = ps.executeQuery();
             if (rs.next()) {
-                stock = rs.getDouble("stock");
+                stock = rs.getDouble("st");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "No se pudo cargar el stock");
@@ -559,8 +563,22 @@ public class Ventas extends JFrame {
     }
 
     public static void actualizarStock(double cantidad, String idProducto) {
-        String consulta = "SELECT stock from productos WHERE id_producto=" + idProducto + ";";
+        String consulta = "SELECT p.stock, p.id_pedido\r\n"
+        		+ "FROM pedidosReporte p\r\n"
+        		+ "JOIN (\r\n"
+        		+ "    SELECT ID_pedido\r\n"
+        		+ "    FROM pedidosReporte\r\n"
+        		+ "    WHERE ID_producto = " + idProducto + "\r\n"
+        		+ "    AND Estado = true\r\n"
+        		+ "    AND stock > 0.0\r\n"
+        		+ "    ORDER BY ABS(DATEDIFF(CURDATE(), Fecha_Vencimiento)) ASC\r\n"
+        		+ "    LIMIT 1\r\n"
+        		+ ") subquery\r\n"
+        		+ "ON p.ID_pedido = subquery.ID_pedido\r\n"
+        		+ "WHERE p.ID_producto = " + idProducto + " AND p.Estado = true;\r\n"
+        		+ "";
         double stock = 0.0;
+        int idpedido = 0;
         conexionBD conec = new conexionBD();
         Connection conn = conec.conexion();
         PreparedStatement ps = null;
@@ -569,20 +587,35 @@ public class Ventas extends JFrame {
             ps = conn.prepareStatement(consulta);
             rs = ps.executeQuery();
             if (rs.next()) {
-                stock = rs.getDouble("stock");
+                stock = rs.getDouble("p.stock");
+                idpedido = rs.getInt("p.id_pedido");
             }
 
             double actual;
                 actual = stock - cantidad; // Restar cantidad al stock existente
-
-            String act = "UPDATE productos SET stock = " + actual + " WHERE id_producto = " + idProducto + ";";
-            ps = conn.prepareStatement(act);
-            int v = ps.executeUpdate();
-            if (v > 0) {
-                System.out.println("Actualizado");
+            if(actual < 0) {
+            	String act = "UPDATE pedidosReporte SET stock = " + 0 + " WHERE id_pedido = " + idpedido + ";";
+                ps = conn.prepareStatement(act);
+                int v = ps.executeUpdate();
+                if (v > 0) {
+                    System.out.println("Actualizado");
+                } else {
+                    System.out.println("No Actualizado");
+                }
+                cantidad = (-1.0) * actual;
+                actualizarStock(cantidad, idProducto);
             } else {
-                System.out.println("No Actualizado");
+            	String act = "UPDATE pedidosReporte SET stock = " + actual + " WHERE id_pedido = " + idpedido + ";";
+                ps = conn.prepareStatement(act);
+                int v = ps.executeUpdate();
+                if (v > 0) {
+                    System.out.println("Actualizado");
+                } else {
+                    System.out.println("No Actualizado");
+                }
             }
+
+            
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "No se pudo actualizar el stock");

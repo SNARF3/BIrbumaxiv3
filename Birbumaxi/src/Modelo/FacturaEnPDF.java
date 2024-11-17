@@ -208,8 +208,8 @@ public class FacturaEnPDF extends ReportePapa{
 		ArrayList<DatosFacturaPDF> inv = new ArrayList<>();
 		String consulta= "select productos.nombre, productos.precio_venta, producto_factura.cantidad, producto_factura.subtotal\r\n"
 				+ "from productos, producto_factura\r\n"
-				+ "where producto_factura.factura_id_factura = " + facID + "\r\n"
-				+ "and producto_factura.productos_ID_producto = productos.ID_producto;";
+				+ "where producto_factura.id_factura = " + facID + "\r\n"
+				+ "and producto_factura.ID_producto = productos.ID_producto;";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
 		PreparedStatement ps= null;
@@ -228,7 +228,7 @@ public class FacturaEnPDF extends ReportePapa{
 				num++;
 			}
 		}catch(Exception e) {
-			
+			System.out.println(e);
 		}finally {
 	        try {
 	            if (rs != null) rs.close();
@@ -246,7 +246,7 @@ public class FacturaEnPDF extends ReportePapa{
 		String nit = "";
 		String consulta= "select NIT\r\n"
 				+ "from persona\r\n"
-				+ "where ID_persona = (select persona_id_persona\r\n"
+				+ "where ID_persona = (select id_persona\r\n"
 				+ "from factura\r\n"
 				+ "where factura.id_factura = " + facID + ");";
 		conexionBD conec= new conexionBD();
@@ -260,7 +260,7 @@ public class FacturaEnPDF extends ReportePapa{
 				nit = rs.getString("NIT");
 			}
 		}catch(Exception e) {
-			
+			System.out.println(e);
 		}finally {
 	        try {
 	            if (rs != null) rs.close();

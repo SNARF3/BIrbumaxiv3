@@ -58,7 +58,7 @@ public class VentasFactura {
 				double cant = Cantidad.get(i);
 				double subtotal = cant * precio;
 				totalEsteSi += subtotal;
-				String compras = "INSERT INTO producto_factura (productos_ID_producto, factura_id_factura, cantidad, subtotal) "
+				String compras = "INSERT INTO producto_factura (ID_producto, id_factura, cantidad, Subtotal) "
 						+ "values(" + productoid + "," + facturaID + "," + cant + "," + subtotal + ");";
 				PreparedStatement ps3= null;
 				ps3 = conn.prepareStatement(compras);
@@ -94,9 +94,9 @@ public class VentasFactura {
 	    }
 	    System.out.println("factura: " + id_factura);
 
-	    String consulta = "SELECT productos.nombre, producto_factura.cantidad, productos.precio_venta, producto_factura.subtotal " +
+	    String consulta = "SELECT productos.nombre, producto_factura.cantidad, productos.precio_venta, producto_factura.Subtotal " +
 	                      "FROM productos, producto_factura " +
-	                      "WHERE factura_id_factura = " + id_factura + " AND producto_factura.productos_id_producto = productos.id_producto;";
+	                      "WHERE id_factura = " + id_factura + " AND producto_factura.id_producto = productos.ID_producto;";
 
 	    
 	    conexionBD conec = new conexionBD();
