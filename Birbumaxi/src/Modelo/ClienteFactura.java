@@ -50,7 +50,7 @@ public class ClienteFactura extends persona{
 	}
 	
 	public void agregarFactura (int idFac, int metPago, int idcliente) {
-		String consulta = "update factura set persona_id_persona = " + idcliente + ", metodo_pago = " + metPago + " where id_factura = " + idFac + ";";
+		String consulta = "update factura set id_persona = " + idcliente + ", metodo_pago = " + metPago + " where id_factura = " + idFac + ";";
 
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
@@ -107,7 +107,7 @@ public class ClienteFactura extends persona{
 	
 	public boolean buscarCliente () {
 		ArrayList<Integer> nits = new ArrayList<>();
-		String consulta= "SELECT nit from persona;";
+		String consulta= "SELECT NIT from persona;";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
 		PreparedStatement ps= null;
@@ -116,7 +116,7 @@ public class ClienteFactura extends persona{
 			ps=conn.prepareStatement(consulta);
 			rs=ps.executeQuery();
 			while(rs.next()) {
-				int num = rs.getInt("nit");
+				int num = rs.getInt("NIT");
 				nits.add(num);
 			}
 		}catch(Exception e) {
@@ -139,7 +139,7 @@ public class ClienteFactura extends persona{
 	
 	public int datosEncontrados (){
 		int idPersona = 1;
-		String consulta= "SELECT id_persona, nombre, correo_electronico from persona where nit = " + nit + ";";
+		String consulta= "SELECT id_persona, nombre, correo_electronico from persona where NIT = " + nit + ";";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
 		PreparedStatement ps= null;
