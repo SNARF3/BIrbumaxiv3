@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.JOptionPane;
+
 import conexionBase.conexionBD;
 
 public class SimularVentas {
@@ -115,7 +117,7 @@ public class SimularVentas {
 				if(baseDatos.get(id).getTipo() == 2) {
 					double cantidad = generarNumeroAleatorio(0.5, 3.5);
 					if(cantidad <= baseDatos.get(id).getStock()) {
-						actualizarStock("" + baseDatos.get(id).getNumero(), cantidad);
+						actualizarStock(cantidad, "" + baseDatos.get(id).getNumero());
 						productos.add("" + baseDatos.get(id).getNumero());
 						cantidades.add(cantidad);
 						ides.remove(id);
@@ -127,7 +129,7 @@ public class SimularVentas {
 				} else {
 					double cantidad = generarNumeroAleatorioTipo2(1.0, 4.0);
 					if(cantidad <= baseDatos.get(id).getStock()) {
-						actualizarStock("" + baseDatos.get(id).getNumero(), cantidad);
+						actualizarStock(cantidad, "" + baseDatos.get(id).getNumero());
 						productos.add("" + baseDatos.get(id).getNumero());
 						cantidades.add(cantidad);
 						ides.remove(id);
@@ -155,49 +157,80 @@ public class SimularVentas {
 	        return bd.doubleValue();
 	   }
 	
-	private static void actualizarStock (String id, double cantidad) {
-		String consulta= "SELECT stock from productos WHERE id_producto="+id+";" ;
-    	double stock = 0.0;
-		conexionBD conec= new conexionBD();
-		Connection conn= conec.conexion();
-		PreparedStatement ps= null;
-		ResultSet rs= null;
-		try {
-			ps=conn.prepareStatement(consulta);
-			rs=ps.executeQuery();
-			if(rs.next()) {
-				stock=Double.parseDouble(rs.getString(1));
-			}
-			
-			double actual;
-			actual = stock - cantidad;
-			
-			String act = "update productos set stock =" + actual + " where ID_producto = " + id + ";";
-			ps = conn.prepareStatement(act);
-			int v = ps.executeUpdate();
-			if (v > 0) {
-				System.out.println("Actualizado");
-			} else {
-				System.out.println("No Actualizado");
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}finally {
+	 public static void actualizarStock(double cantidad, String idProducto) {
+	        String consulta = "SELECT p.stock, p.id_pedido\r\n"
+	        		+ "FROM pedidosReporte p\r\n"
+	        		+ "JOIN (\r\n"
+	        		+ "    SELECT ID_pedido\r\n"
+	        		+ "    FROM pedidosReporte\r\n"
+	        		+ "    WHERE ID_producto = " + idProducto + "\r\n"
+	        		+ "    AND Estado = true\r\n"
+	        		+ "    AND stock > 0.0\r\n"
+	        		+ "    ORDER BY ABS(DATEDIFF(CURDATE(), Fecha_Vencimiento)) ASC\r\n"
+	        		+ "    LIMIT 1\r\n"
+	        		+ ") subquery\r\n"
+	        		+ "ON p.ID_pedido = subquery.ID_pedido\r\n"
+	        		+ "WHERE p.ID_producto = " + idProducto + " AND p.Estado = true;\r\n"
+	        		+ "";
+	        double stock = 0.0;
+	        int idpedido = 0;
+	        conexionBD conec = new conexionBD();
+	        Connection conn = conec.conexion();
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
 	        try {
-	            if (rs != null) rs.close();
-	            if (ps != null) ps.close();
-	            if (conn != null) conn.close();
-	            System.out.println("conexiones cerradas");
-	        } catch (SQLException ex) {
-	            ex.printStackTrace();
+	            ps = conn.prepareStatement(consulta);
+	            rs = ps.executeQuery();
+	            if (rs.next()) {
+	                stock = rs.getDouble("p.stock");
+	                idpedido = rs.getInt("p.id_pedido");
+	            }
+
+	            double actual;
+	                actual = stock - cantidad; // Restar cantidad al stock existente
+	            if(actual < 0) {
+	            	String act = "UPDATE pedidosReporte SET stock = " + 0 + " WHERE id_pedido = " + idpedido + ";";
+	                ps = conn.prepareStatement(act);
+	                int v = ps.executeUpdate();
+	                if (v > 0) {
+	                    System.out.println("Actualizado");
+	                } else {
+	                    System.out.println("No Actualizado");
+	                }
+	                cantidad = (-1.0) * actual;
+	                actualizarStock(cantidad, idProducto);
+	            } else {
+	            	String act = "UPDATE pedidosReporte SET stock = " + actual + " WHERE id_pedido = " + idpedido + ";";
+	                ps = conn.prepareStatement(act);
+	                int v = ps.executeUpdate();
+	                if (v > 0) {
+	                    System.out.println("Actualizado");
+	                } else {
+	                    System.out.println("No Actualizado");
+	                }
+	            }
+
+	            
+
+	        } catch (Exception e) {
+	            JOptionPane.showMessageDialog(null, "No se pudo actualizar el stock");
+	        } finally {
+	            try {
+	                if (rs != null) rs.close();
+	                if (ps != null) ps.close();
+	                if (conn != null) conn.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
 	        }
 	    }
-	}
 	
 	private static ArrayList<VentasSimularProductos> obtenerDatos (){
 		ArrayList<VentasSimularProductos> inv = new ArrayList<>();
-		String consulta= "select ID_producto, nombre, precio_venta, tipo, stock\r\n"
-				+ "from productos;";
+		String consulta= "select p.ID_producto, p.nombre, p.precio_venta, p.tipo, sum(pr.stock) as st\r\n"
+				+ "from productos as p, pedidosReporte as pr\r\n"
+				+ "where p.ID_producto = pr.ID_Producto\r\n"
+				+ "group by p.ID_producto;";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
 		PreparedStatement ps= null;
@@ -210,7 +243,7 @@ public class SimularVentas {
 				String nombre = rs.getString("nombre");
 				double precio = Double.parseDouble(rs.getString("precio_venta"));
 				int tipo = Integer.parseInt(rs.getString("tipo"));
-				double stock = Double.parseDouble(rs.getString("stock"));
+				double stock = Double.parseDouble(rs.getString("st"));
 				VentasSimularProductos datos = new VentasSimularProductos(num, nombre, precio, tipo, stock);
 				inv.add(datos);
 				num++;

@@ -91,16 +91,16 @@ public class Panel1 extends JPanel {
 		Connection conn=conec.conexion();
 		String[] datos = new String[7];
 		try {
-			ps=conn.prepareStatement("SELECT ID_empleado, nombre, apellido, ci, correo, cargo, salario from empleados WHERE estado=1;");
+			ps=conn.prepareStatement("SELECT ID_empleado, Nombre, Apellido, ci, usurario, cargo, Salario from empleados WHERE estado=1;");
 			rs=ps.executeQuery();
 			while(rs.next()) {
 				datos[0]= rs.getString("ID_empleado");
-				datos[1]=rs.getString("nombre");
-				datos[2]=rs.getString("apellido");
+				datos[1]=rs.getString("Nombre");
+				datos[2]=rs.getString("Apellido");
 				datos[3]= rs.getString("ci");
-				datos[4]=rs.getString("correo");;
+				datos[4]=rs.getString("usurario");;
 				datos[5]=rs.getString("cargo");
-				datos[6]=rs.getString("salario");
+				datos[6]=rs.getString("Salario");
 				modelo.addRow(datos);
 			}
 			

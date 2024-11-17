@@ -364,17 +364,21 @@ public class Ventas extends JFrame {
         JButton btnRealizarVenta = new JButton("Realizar Venta");
         btnRealizarVenta.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		imprimirdatos();
-        		VentasFactura v = new VentasFactura(cantidades, productos);
-        		for(int i = 0; i < productos.size(); i++) {
-        			actualizarStock(cantidades.get(i), productos.get(i));
+        		if(cantidades.size() == 0 && productos.size() == 0) {
+        			JOptionPane.showMessageDialog(null, "Debe agregar al menos un producto al carrito");
+        		} else {
+	        		imprimirdatos();
+	        		VentasFactura v = new VentasFactura(cantidades, productos);
+	        		for(int i = 0; i < productos.size(); i++) {
+	        			actualizarStock(cantidades.get(i), productos.get(i));
+	        		}
+	        		int facturaID = v.RealizarVenta("CONVERT_TZ(NOW(), @@global.time_zone, 'America/La_Paz')");
+	        		Factura factura = new Factura(facturaID, productos, cantidades);
+	        		factura.setVisible(true);
+	        		cantidades.clear();
+	        		productos.clear();
+	        		dispose();
         		}
-        		int facturaID = v.RealizarVenta("CONVERT_TZ(NOW(), @@global.time_zone, 'America/La_Paz')");
-        		Factura factura = new Factura(facturaID, productos, cantidades);
-        		factura.setVisible(true);
-        		cantidades.clear();
-        		productos.clear();
-        		dispose();
         	}
         });
         btnRealizarVenta.setForeground(Color.WHITE);

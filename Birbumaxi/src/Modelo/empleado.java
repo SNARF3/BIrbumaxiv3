@@ -64,8 +64,8 @@ public class empleado extends persona{
 	
 
 	public boolean despedir(String palabraClave) { //para buscar por id o por nombre
-		String sql= "SELECT estado from empleados WHERE nombre LIKE %'"+palabraClave+"'% OR id_empleado LIKE %'"+palabraClave+"'%;";
-		String sql2= "UPDATE empleados SET estado=false WHERE nombre ='"+palabraClave +"' OR id_empleado ="+palabraClave+";";
+		String sql= "SELECT estado from empleados WHERE Nombre LIKE %'"+palabraClave+"'% OR ID_empleado LIKE %'"+palabraClave+"'%;";
+		String sql2= "UPDATE empleados SET estado=false WHERE Nombre ='"+palabraClave +"' OR ID_empleado ="+palabraClave+";";
 		PreparedStatement ps=null;
 		ResultSet rs= null;
 		conexionBD conec= new conexionBD();
@@ -100,7 +100,7 @@ public class empleado extends persona{
 	public boolean contratar() {
 		System.out.println(contrasena);
 		System.out.println(contrasena.length());
-	    String sql = "INSERT INTO empleados (estado, correo, contrasenia, cargo, nombre, apellido, ci, salario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	    String sql = "INSERT INTO empleados (estado, usurario, contrasenia, cargo, Nombre, Apellido, ci, Salario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	    PreparedStatement ps = null;
 	    conexionBD conec = new conexionBD();
 	    Connection conn = conec.conexion();
