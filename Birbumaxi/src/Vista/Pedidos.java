@@ -66,6 +66,7 @@ public class Pedidos extends JFrame {
     public static final JComboBox categ = new JComboBox(cat);
     public static final String[] columnas = {"ID", "Nombre"};
     public DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+    private JTextField textFechaVencimiento;
     /**
      * Create the frame.
      */
@@ -361,6 +362,19 @@ public class Pedidos extends JFrame {
                 calcular.setBackground(new Color(128, 128, 128));
                 calcular.setBounds(735, 250, 120, 29);
                 contentPane.add(calcular);
+                
+                JLabel lblFechaDeVencimiento = new JLabel("Fecha de vencimiento:");
+                lblFechaDeVencimiento.setForeground(Color.WHITE);
+                lblFechaDeVencimiento.setFont(new Font("Dialog", Font.ITALIC, 18));
+                lblFechaDeVencimiento.setBounds(735, 210, 205, 29);
+                contentPane.add(lblFechaDeVencimiento);
+                
+                textFechaVencimiento = new JTextField();
+                textFechaVencimiento.setFont(new Font("Dialog", Font.BOLD, 21));
+                textFechaVencimiento.setColumns(10);
+                textFechaVencimiento.setBackground(Color.WHITE);
+                textFechaVencimiento.setBounds(941, 210, 126, 30);
+                contentPane.add(textFechaVencimiento);
         
 
     }
