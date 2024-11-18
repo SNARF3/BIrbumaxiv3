@@ -320,15 +320,7 @@ public class Pedidos extends JFrame {
 
                 btnPagar.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
                         if (actualizarStock()) {
-=======
-<<<<<<< HEAD
-                        if (actualizarStock()) {                        	
-=======
-                        if (actualizarStock()) {
->>>>>>> e3e3bdb2aad1836a43703dfcfcbcf931d2ba1381
->>>>>>> dc30b876b0aa175bd246b151efbea763f52accfc
                         	JOptionPane.showMessageDialog(null, "Compra Realizada");
                         } else {
                             JOptionPane.showMessageDialog(null, "No se pudo Realizar la compra");
