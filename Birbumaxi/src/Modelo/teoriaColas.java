@@ -97,66 +97,37 @@ public class teoriaColas {
     }
 
     // Método que aplica la teoría de colas dependiendo de la cantidad de cajeros
-    public static teoriaColas calcularTeoriaColas() {
+    public static teoriaColas calcularTeoriaColas(int n) {
         // Parámetros promedio de un supermercado
-        double tasaLlegada = 10;  // tasa promedio de llegada de clientes por unidad de tiempo
-        double tasaServicio = 12; // tasa promedio de servicio por cajero
-
-        // Consulta para contar cuántos cajeros (empleados con cargo = 0) hay
-        String consultaCajeros = "SELECT COUNT(*) AS totalCajeros FROM empleados WHERE cargo = 0";
-        conexionBD conec = new conexionBD();
-        Connection conn = conec.conexion();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        teoriaColas teoria = null;
-
-        try {
-            // Obtener el número de cajeros
-            ps = conn.prepareStatement(consultaCajeros);
-            rs = ps.executeQuery();
-            int totalCajeros = 0;
-
-            if (rs.next()) {
-                totalCajeros = rs.getInt("totalCajeros");
-            }
-
-            // Crear un objeto teoriaColas
-            teoria = new teoriaColas(tasaLlegada, tasaServicio);
-            teoria.setS(totalCajeros);
-
-            // Aplicar teoría de colas según el número de cajeros
-            if (totalCajeros == 1) {
-                System.out.println("Teoría de colas para un servidor (M/M/1):");
-                teoria.aplicarTeoriaColas1();
-            } else if (totalCajeros > 1) {
-                System.out.println("Teoría de colas para varios servidores (M/M/c):");
-                teoria.aplicarTeoriaColasMultiples(totalCajeros);
-            } else {
-                System.out.println("No hay cajeros en el sistema.");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al contar los cajeros: " + e.getMessage());
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null) conn.close();
-                System.out.println("Conexiones cerradas");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+        double tasaLlegada = 10;  // Tasa promedio de llegada de clientes por unidad de tiempo
+        double tasaServicio = 12; // Tasa promedio de servicio por cajero
+    
+        // Crear un objeto teoriaColas
+        teoriaColas teoria = new teoriaColas(tasaLlegada, tasaServicio);
+        teoria.setS(n); // Establecer el número de cajeros
+    
+        // Aplicar teoría de colas según el número de cajeros
+        if (n == 1) {
+            System.out.println("Teoría de colas para un servidor (M/M/1):");
+            teoria.aplicarTeoriaColas1(); // Método para M/M/1
+        } else if (n > 1) {
+            System.out.println("Teoría de colas para varios servidores (M/M/c):");
+            teoria.aplicarTeoriaColasMultiples(n); // Método para M/M/c
+        } else {
+            System.out.println("No hay cajeros en el sistema.");
         }
+    
         return teoria;
     }
+    
 
     // Fórmulas para M/M/1 (un servidor)
     private void aplicarTeoriaColas1() {
         // Utilizamos la fórmula M/M/1
         this.rho = tasaLlegada / tasaServicio; // Utilización del servidor
         this.po = 1 - rho;
-        this.Ls = rho / (1 - rho); // Número promedio de clientes en el sistema
-        this.Lq = (tasaLlegada * tasaLlegada) / (tasaServicio * (tasaServicio - tasaLlegada)); // Número promedio de clientes en la cola
+        this.Ls = Math.round(rho / (1 - rho)); // Número promedio de clientes en el sistema
+        this.Lq = Math.round((tasaLlegada * tasaLlegada) / (tasaServicio * (tasaServicio - tasaLlegada))); // Número promedio de clientes en la cola
         this.Ws = 1 / (tasaServicio - tasaLlegada); // Tiempo promedio en el sistema
         this.Wq = tasaLlegada / (tasaServicio * (tasaServicio - tasaLlegada)); // Tiempo promedio en la cola
 
@@ -174,10 +145,10 @@ public class teoriaColas {
 
         this.rho = tasaLlegada / (totalCajeros * tasaServicio); // Utilización del sistema
         this.po = calcularP0(totalCajeros); // Probabilidad de que no haya clientes en el sistema
-        this.Lq = (po * Math.pow(m, totalCajeros) * rho) / (factorial(totalCajeros) * (Math.pow((1 - rho), 2))); // Número promedio de clientes en la cola
+        this.Lq = Math.round((po * Math.pow(m, totalCajeros) * rho) / (factorial(totalCajeros) * (Math.pow((1 - rho), 2)))); // Número promedio de clientes en la cola
         this.Wq = Lq / tasaLlegada; // Tiempo promedio en la cola
         this.Ws = Wq + (1 / tasaServicio); // Tiempo promedio en el sistema
-        this.Ls = tasaLlegada * (Wq + (1 / tasaServicio)); // Número promedio de clientes en el sistema
+        this.Ls = Math.round(tasaLlegada * (Wq + (1 / tasaServicio))) ; // Número promedio de clientes en el sistema
 
         System.out.printf("Utilización del sistema (ρ): %.2f%n", rho);
         System.out.printf("Número promedio de clientes en el sistema (L): %.2f%n", Ls);
@@ -202,7 +173,7 @@ public class teoriaColas {
     }
 
     // Función que calcula el factorial de un número
-    private int factorial(int n) {
+    public static int factorial(int n) {
         int fact = 1;
         for (int i = 1; i <= n; i++) {
             fact *= i;
@@ -211,7 +182,7 @@ public class teoriaColas {
     }
 
     // Función que calcula p(n)
-    public double calcularP(int n, teoriaColas x) {
+    public static double calcularP(int n, teoriaColas x) {
         double m = x.getTasaLlegada() / x.getTasaServicio(); // Corregido con los métodos get
         double p_n = 0;
     

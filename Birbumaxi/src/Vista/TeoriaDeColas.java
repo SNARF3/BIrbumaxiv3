@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import Modelo.EOQ;
 import Modelo.ReporteFinanzas;
 import Modelo.ReporteInventario;
 import Modelo.teoriaColas;
@@ -23,6 +24,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+
+import conexionBase.conexionBD;
+import java.sql.*;
 
 public class TeoriaDeColas extends JFrame {
 
@@ -42,6 +47,7 @@ public class TeoriaDeColas extends JFrame {
     private JTextField textField_1;
     private JTextField textn;
     private JTextField textField_3;
+    public teoriaColas teo;
 
     /**
      * Create the frame.
@@ -110,7 +116,45 @@ public class TeoriaDeColas extends JFrame {
         cajeros.setBounds(355, 23, 81, 37);
         panel.add(cajeros);
 
-        teoriaColas teo = teoriaColas.calcularTeoriaColas();
+        // Consulta para contar cuántos cajeros (empleados con cargo = 0) hay
+        String consultaCajeros = "SELECT COUNT(*) AS totalCajeros FROM empleados WHERE cargo = 2"; // Cambiar a 0 según el comentario
+        conexionBD conec = new conexionBD();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int totalCajeros = 0;
+
+        try {
+            // Establecer conexión
+            conn = conec.conexion();
+
+            // Preparar y ejecutar la consulta
+            ps = conn.prepareStatement(consultaCajeros);
+            rs = ps.executeQuery();
+
+            // Obtener el resultado
+            if (rs.next()) {
+                totalCajeros = rs.getInt("totalCajeros");
+            }
+
+            System.out.println("Total de cajeros: " + totalCajeros);
+        } catch (SQLException e) {
+            // Manejo de errores
+            System.err.println("Error al ejecutar la consulta: " + e.getMessage());
+        } finally {
+            try {
+                // Cerrar recursos en orden inverso
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+
+        cajeros.setText(String.format("%d", totalCajeros)); // Número de servidores
+
+        
         
         
         JLabel lblDatosDelProducto = new JLabel("Numero de cajeros contratados:");
@@ -133,22 +177,49 @@ public class TeoriaDeColas extends JFrame {
         btnSimular.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (teo != null) {
-                    try {
-                        // Actualizar los campos de texto con los valores de `teo`
-                        textT.setText(String.format("%.2f", teo.getS())); // Número de servidores
+                try {
+                    // Obtener el número de cajeros ingresado por el usuario
+                    int numeroDeCajeros = Integer.parseInt(textT.getText());
+                    
+                    
+
+                    if (numeroDeCajeros <= 0) {
+                        JOptionPane.showMessageDialog(panel, "Por favor, ingrese un número de cajeros válido mayor a cero.",
+                                "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    // Llamar al método calcularTeoriaColas pasando el número de cajeros
+                    teo = teoriaColas.calcularTeoriaColas(numeroDeCajeros);
+
+                    if (teo != null) {
+                        // Actualizar los campos de texto con los valores calculados
+                        textT.setText(String.format("%d", teo.getS())); // Número de servidores
                         textFactorDeUtilizacion.setText(String.format("%.2f", teo.getRho())); // Factor de utilización
-                        textLq.setText(String.format("%.2f", teo.getLq())); // Número promedio de clientes en cola
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(panel, "Error al calcular los valores: " + ex.getMessage(),
+                        textLq.setText(String.format("%.2f", teo.getLq())); // Clientes en cola
+                        textLs.setText(String.format("%.2f", teo.getLs())); // Clientes en sistema
+                        textProbabilidadColaVacia.setText(String.format("%.2f", teo.getPo())); // Probabilidad de cola vacía
+                        textWsMinutos.setText(String.format("%.2f", teo.getWs() * 60)); // Espera en sistema en minutos
+                        textWqMinutos.setText(String.format("%.2f", teo.getWq() * 60)); // Espera en cola en minutos
+                        textField.setText(String.format("%.2f", teo.getTasaLlegada() )); // Espera en cola en minutos
+                        textField_1.setText(String.format("%.2f", teo.getTasaServicio() )); // Espera en cola en minutos
+                        textWsHoras.setText(String.format("%.2f", teo.getWs() )); // Espera en cola en minutos
+                        textWqHoras.setText(String.format("%.2f", teo.getWq() )); // Espera en cola en minutos
+
+                    } else {
+                        JOptionPane.showMessageDialog(panel, "No se pudo calcular los valores de teoría de colas.",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(panel, "El objeto teoría de colas no está inicializado.",
-                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(panel, "Por favor, ingrese un número válido de cajeros.",
+                            "Error de Entrada", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, "Ocurrió un error inesperado: " + ex.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
 
         
         JLabel lblResultados = new JLabel("Simulacion:");
@@ -387,10 +458,31 @@ public class TeoriaDeColas extends JFrame {
         btnPn.setBounds(335, 449, 105, 38);
         panel.add(btnPn);
         
+        btnPn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Obtener el valor de 'n' y verificar que sea mayor que 0
+                    int n = Integer.parseInt(textn.getText());
+                    if (n < 0) {
+                        // Mostrar alerta si 'n' es menor o igual a 0
+                        JOptionPane.showMessageDialog(panel, "Por favor ingrese un valor mayor o igual a 0 para 'n'.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        // Realizar el cálculo si 'n' es válido
+                        double p_n = teoriaColas.calcularP(n, teo);
+                        textField_3.setText(String.format("%.2f", p_n)); // Espera en cola en minutos
+                    }
+                } catch (NumberFormatException ex) {
+                    // Mostrar alerta si el valor ingresado no es un número válido
+                    JOptionPane.showMessageDialog(panel, "Por favor ingrese un valor numérico válido para 'n'.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
         JLabel lblResultados_2_1 = new JLabel("Clientes en cola:");
         lblResultados_2_1.setForeground(Color.WHITE);
         lblResultados_2_1.setFont(new Font("Roboto Medium", Font.BOLD, 21));
         lblResultados_2_1.setBounds(28, 410, 269, 29);
         panel.add(lblResultados_2_1);
+        
     }
 }
