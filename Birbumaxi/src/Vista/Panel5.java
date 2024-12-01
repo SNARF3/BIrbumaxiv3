@@ -142,7 +142,7 @@ public class Panel5 extends JPanel {
 		btnPedirNuevoProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				productos prod = new productos();
-				if(prod.IngresoProducto(nombre.getText(), tipo.getSelectedIndex()+1, Double.parseDouble(stock.getText()), Double.parseDouble(precioCompra.getText()), Double.parseDouble(precioVenta.getText()), comboBox.getSelectedIndex()+1, proveedor.getText(), telefono.getText())) {
+				if(prod.IngresoProducto(nombre.getText(),Double.parseDouble(precioCompra.getText()), Double.parseDouble(precioVenta.getText()), Double.parseDouble(stock.getText()), Double.parseDouble(demanda.getText()), textFechaVencimiento.getText(), proveedor.getText(), telefono.getText() ,comboBox.getSelectedIndex()+1, Double.parseDouble(mantenerinventario.getText()), Double.parseDouble(producirordenar.getText()) )) {
 					JOptionPane.showMessageDialog(null, "PRODUCTO AGREGADO CON EXITO!");
 				}else {
 					JOptionPane.showMessageDialog(null, "No se pudo agregar el producto :(");

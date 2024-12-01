@@ -153,8 +153,8 @@ public class Panel6 extends JPanel {
 		add(btnBuscar);
 
 	}
-    public static void buscar(String palabraClave) {
-        String sql = "SELECT productos.id_producto, productos.nombre, productos.precio_compra, productos.precio_venta, productos.categoria, Pedidos.nombre_P FROM productos, Pedidos WHERE productos.id_producto =" + palabraClave + " AND productos.id_producto=Pedidos.id_producto;";
+	public static void buscar(String palabraClave) {
+        String sql = "select productos.ID_producto, productos.nombre, productos.precio_compra, productos.precio_venta, productos.categoria, Proveedor.nombre_Prov FROM productos, pedidosReporte, Proveedor WHERE productos.ID_producto = "+ palabraClave +" AND productos.id_producto=pedidosReporte.id_producto and pedidosReporte.ID_Proveedor = Proveedor.ID_Proveedor;";
         conexionBD conec = new conexionBD();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -167,7 +167,7 @@ public class Panel6 extends JPanel {
                 nombreproducto.setText(rs.getString("productos.nombre"));
                 precioCompra.setText(rs.getString("productos.precio_compra"));
                 precioVenta.setText(rs.getString("productos.precio_venta"));
-                proveedor.setText(rs.getString("Pedidos.nombre_P"));
+                proveedor.setText(rs.getString("Proveedor.nombre_Prov"));
                 comboBox.setSelectedIndex(Integer.parseInt(rs.getString("productos.categoria"))-1);
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró al empleado");
@@ -185,9 +185,17 @@ public class Panel6 extends JPanel {
         }
     }
     
-    public boolean actualizar() {
+	public boolean actualizar() {
         String sql = "UPDATE productos SET nombre=?, precio_compra=?, precio_venta=?, categoria=? WHERE ID_producto=?";
-        String sql2 = "UPDATE Pedidos SET nombre_P=? WHERE id_producto=?";
+        String sql2 = "UPDATE Proveedor\n" + //
+						"SET nombre_Prov = ?\n" + //
+						"WHERE ID_proveedor = (\n" + //
+						"    SELECT pedidosReporte.ID_Proveedor\n" + //
+						"    FROM productos, pedidosReporte\n" + //
+						"    WHERE productos.ID_producto = ?\n" + //
+						"      AND productos.ID_producto = pedidosReporte.ID_producto\n" + //
+						");\n" + //
+						"";
         PreparedStatement ps = null;
         PreparedStatement ps1 = null;
         conexionBD conec = new conexionBD();
@@ -229,6 +237,5 @@ public class Panel6 extends JPanel {
             }
         }
     }
-
 
 }
