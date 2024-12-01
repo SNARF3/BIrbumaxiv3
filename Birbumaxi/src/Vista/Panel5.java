@@ -24,7 +24,7 @@ public class Panel5 extends JPanel {
 	public static final JTextField proveedor = new JTextField();
 	public static final JTextField telefono = new JTextField();
 	public static final String[] tipos = {"Por Unidad", "Por kg"}; 
-	public static final JComboBox tipo = new JComboBox(tipos);
+	public static final JComboBox tipoProducto = new JComboBox(tipos);
 	public static final String[] productos = {"Frutas", "Verduras", "Carnes", "Lacteos", "Cereales", "Dulces", "Limpieza", "Aseo Personal"};
 	public static final JComboBox<String> comboBox = new JComboBox<>(productos);
 	private JTextField textFechaVencimiento;
@@ -125,10 +125,10 @@ public class Panel5 extends JPanel {
 		lblTipo.setFont(new Font("Dialog", Font.ITALIC, 21));
 		lblTipo.setBounds(384, 186, 60, 29);
 		add(lblTipo);
-		tipo.setFont(new Font("Dialog", Font.PLAIN, 21));
+		tipoProducto.setFont(new Font("Dialog", Font.PLAIN, 21));
 
-		tipo.setBounds(459, 190, 149, 29);
-		add(tipo);
+		tipoProducto.setBounds(459, 190, 149, 29);
+		add(tipoProducto);
 		
 		JLabel lblProveedor = new JLabel("Proveedor:");
 		lblProveedor.setForeground(Color.WHITE);
@@ -146,7 +146,7 @@ public class Panel5 extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				productos prod = new productos();
 				//las variables que tienes que agregar esta en rojo
-				if(prod.IngresoProducto(nombre.getText(),Double.parseDouble(precioCompra.getText()), Double.parseDouble(precioVenta.getText()), Double.parseDouble(stock.getText()), Double.parseDouble(demanda.getText()), textFechaVencimiento.getText(), proveedor.getText(), telefono.getText() ,comboBox.getSelectedIndex()+1, Double.parseDouble(mantenerinventario.getText()), Double.parseDouble(producirordenar.getText()), Integer.parseInt(tipoProducto) )) {
+				if(prod.IngresoProducto(nombre.getText(),Double.parseDouble(precioCompra.getText()), Double.parseDouble(precioVenta.getText()), Double.parseDouble(stock.getText()), Double.parseDouble(demanda.getText()), textFechaVencimiento.getText(), proveedor.getText(), telefono.getText() ,comboBox.getSelectedIndex()+1, Double.parseDouble(mantenerinventario.getText()), Double.parseDouble(producirordenar.getText()), tipoProducto.getSelectedIndex()+1)) {
 					JOptionPane.showMessageDialog(null, "PRODUCTO AGREGADO CON EXITO!");
 				}else {
 					JOptionPane.showMessageDialog(null, "No se pudo agregar el producto :(");
