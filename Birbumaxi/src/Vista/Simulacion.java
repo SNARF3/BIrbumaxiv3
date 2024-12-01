@@ -33,7 +33,7 @@ public class Simulacion extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 682, 437);
         contentPane = new JPanel();
-        contentPane.setBackground(new Color(31, 205, 184));
+        contentPane.setBackground(new Color(255, 128, 0));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);

@@ -74,7 +74,7 @@ public class TeoriaDeColas extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("TEORIA DE COLAS");
 		lblNewLabel_2.setForeground(Color.WHITE);
 		lblNewLabel_2.setFont(new Font("Roboto Black", Font.BOLD, 41));
-		lblNewLabel_2.setBounds(113, 0, 361, 83);
+		lblNewLabel_2.setBounds(113, 0, 427, 83);
 		contentPane.add(lblNewLabel_2);
 		
 		JButton btnCerrarSesion = new JButton("Atras");

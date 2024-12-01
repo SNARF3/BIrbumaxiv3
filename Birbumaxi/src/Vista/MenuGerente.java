@@ -24,7 +24,7 @@ public class MenuGerente extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 990, 695);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(31, 205, 184));
+		contentPane.setBackground(new Color(255, 128, 0));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
@@ -33,7 +33,7 @@ public class MenuGerente extends JFrame {
 
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Documentos\\mikon\\Imagengerente.jpg"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Documentos\\imag\\Imagengerente.jpg"));
 		lblNewLabel_1.setBounds(609, 0, 372, 663);
 		contentPane.add(lblNewLabel_1);
 		
@@ -48,7 +48,7 @@ public class MenuGerente extends JFrame {
 		contentPane.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Documentos\\mikon\\logo330x200.png"));
+		lblNewLabel.setIcon(new ImageIcon("C:\\Documentos\\imag\\logo330x200.png"));
 
 		lblNewLabel.setBounds(116, -12, 330, 200);
 
