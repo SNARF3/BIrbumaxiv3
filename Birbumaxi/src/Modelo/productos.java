@@ -11,8 +11,8 @@ public class productos {
 	public boolean IngresoProducto(String nombre, double precioCompra, double precioVenta, double cantidad,
 			double demanda,
 			String fechaLimita, String proveedor, String telefono, int categoria,
-			double mantenerInv, double ordenar) {
-		String sqlCallProcedure = "{CALL ingresarProducto(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+			double mantenerInv, double ordenar, int tipo) {
+		String sqlCallProcedure = "{CALL ingresarProducto(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 		conexionBD conec = new conexionBD();
 		Connection conn = conec.conexion();
 		CallableStatement cs = null;
@@ -29,6 +29,7 @@ public class productos {
 			cs.setInt(9, categoria); // categoría del producto
 			cs.setDouble(10, mantenerInv); // cantidad mínima de inventario a mantener
 			cs.setDouble(11, ordenar); // cantidad de reabastecimiento
+			cs.setInt(12, tipo); // tipo del producto
 			// Ejecutar el procedimiento almacenado
 			int result = cs.executeUpdate();
 			if (result > 0) {
