@@ -107,20 +107,17 @@ public class SimularVentas {
 		ArrayList<VentasSimularProductos> baseDatos = new ArrayList<>();
 		ArrayList<Integer> ides = new ArrayList<>();
 		baseDatos = obtenerDatos();
-		for(VentasSimularProductos venp : baseDatos) {
-			ides.add(venp.getNumero());
-		}
 		
 		for(int i = 0; i < compra; i++) {
-			int id = random.nextInt(ides.size());
-			if(ides.contains(id + 1)) {
+			int id = random.nextInt(baseDatos.size());
+			if(!ides.contains(id)) {
 				if(baseDatos.get(id).getTipo() == 2) {
 					double cantidad = generarNumeroAleatorio(0.5, 3.5);
 					if(cantidad <= baseDatos.get(id).getStock()) {
 						actualizarStock(cantidad, "" + baseDatos.get(id).getNumero());
 						productos.add("" + baseDatos.get(id).getNumero());
 						cantidades.add(cantidad);
-						ides.remove(id);
+						ides.add(id);
 						total += cantidad * baseDatos.get(id).getPrecio();
 						baseDatos.remove(id);
 					} else {
@@ -132,7 +129,7 @@ public class SimularVentas {
 						actualizarStock(cantidad, "" + baseDatos.get(id).getNumero());
 						productos.add("" + baseDatos.get(id).getNumero());
 						cantidades.add(cantidad);
-						ides.remove(id);
+						ides.add(id);
 						total += cantidad * baseDatos.get(id).getPrecio();
 						baseDatos.remove(id);
 					} else {
@@ -143,6 +140,8 @@ public class SimularVentas {
 		}
 		return total;
 	}
+	
+	
 	public static double generarNumeroAleatorioTipo2(double min, double max) {
         int minInt = (int) Math.ceil(min);
         int maxInt = (int) Math.floor(max);

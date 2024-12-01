@@ -25,7 +25,7 @@ public class menuPrincipal {
 		/*login ventana1 = new login();
 		ventana1.setVisible(true);*/
 		//MenuGerente menug = new MenuGerente();
-		//menug.setVisible(true);
+		//xxmenug.setVisible(true);
 		//MenuGerente menug = new MenuGerente();
 		//menug.setVisible(true);
 		//Ventas v = new Ventas();
