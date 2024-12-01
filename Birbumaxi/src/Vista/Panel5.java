@@ -28,6 +28,9 @@ public class Panel5 extends JPanel {
 	public static final String[] productos = {"Frutas", "Verduras", "Carnes", "Lacteos", "Cereales", "Dulces", "Limpieza", "Aseo Personal"};
 	public static final JComboBox<String> comboBox = new JComboBox<>(productos);
 	private JTextField textFechaVencimiento;
+	private JTextField demanda;
+	private JTextField mantenerinventario;
+	private JTextField producirordenar;
 
 	/**
 	 * Create the panel.
@@ -39,59 +42,59 @@ public class Panel5 extends JPanel {
 		JLabel lblNombreDelProducto = new JLabel("Nombre: ");
 		lblNombreDelProducto.setForeground(Color.WHITE);
 		lblNombreDelProducto.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblNombreDelProducto.setBounds(102, 73, 98, 29);
+		lblNombreDelProducto.setBounds(102, 67, 98, 29);
 		add(lblNombreDelProducto);
 		
 		nombre.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
 		nombre.setColumns(10);
-		nombre.setBounds(199, 72, 138, 30);
+		nombre.setBounds(199, 66, 138, 30);
 		add(nombre);
 		
 		JLabel lblPrecioDeCompra = new JLabel("Precio de compra:");
 		lblPrecioDeCompra.setForeground(Color.WHITE);
 		lblPrecioDeCompra.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblPrecioDeCompra.setBounds(10, 111, 179, 29);
+		lblPrecioDeCompra.setBounds(10, 107, 179, 29);
 		add(lblPrecioDeCompra);
 		
 
 		precioCompra.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
 		precioCompra.setColumns(10);
-		precioCompra.setBounds(199, 110, 138, 30);
+		precioCompra.setBounds(199, 106, 138, 30);
 		add(precioCompra);
 		
 		JLabel lblPrecioDeVenta = new JLabel("Precio de venta:");
 		lblPrecioDeVenta.setForeground(Color.WHITE);
 		lblPrecioDeVenta.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblPrecioDeVenta.setBounds(31, 151, 158, 29);
+		lblPrecioDeVenta.setBounds(31, 147, 158, 29);
 		add(lblPrecioDeVenta);
 		
 
 		precioVenta.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
 		precioVenta.setColumns(10);
-		precioVenta.setBounds(199, 151, 138, 30);
+		precioVenta.setBounds(199, 147, 138, 30);
 		add(precioVenta);
 		
 		JLabel lblCantidad = new JLabel("Cantidad:");
 		lblCantidad.setForeground(Color.WHITE);
 		lblCantidad.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblCantidad.setBounds(91, 190, 98, 29);
+		lblCantidad.setBounds(91, 186, 98, 29);
 		add(lblCantidad);
 		
 
 		stock.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
 		stock.setColumns(10);
-		stock.setBounds(199, 189, 138, 30);
+		stock.setBounds(199, 185, 138, 30);
 		add(stock);
 		
 
 		comboBox.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
-		comboBox.setBounds(459, 151, 149, 29);
+		comboBox.setBounds(459, 147, 149, 29);
 		add(comboBox);
 		
 		JLabel lblCategoria = new JLabel("Categoria:");
 		lblCategoria.setForeground(Color.WHITE);
 		lblCategoria.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblCategoria.setBounds(347, 151, 113, 29);
+		lblCategoria.setBounds(347, 147, 113, 29);
 		add(lblCategoria);
 		
 		JPanel panel = new JPanel();
@@ -109,33 +112,33 @@ public class Panel5 extends JPanel {
 		JLabel lblTelefono = new JLabel("Telefono:");
 		lblTelefono.setForeground(Color.WHITE);
 		lblTelefono.setFont(new Font("Dialog", Font.ITALIC, 21));
-		lblTelefono.setBounds(347, 111, 113, 29);
+		lblTelefono.setBounds(347, 107, 113, 29);
 		add(lblTelefono);
 		
 		telefono.setFont(new Font("Dialog", Font.PLAIN, 21));
 		telefono.setColumns(10);
-		telefono.setBounds(459, 110, 149, 30);
+		telefono.setBounds(459, 106, 149, 30);
 		add(telefono);
 		
 		JLabel lblTipo = new JLabel("Tipo:");
 		lblTipo.setForeground(Color.WHITE);
 		lblTipo.setFont(new Font("Dialog", Font.ITALIC, 21));
-		lblTipo.setBounds(384, 190, 60, 29);
+		lblTipo.setBounds(384, 186, 60, 29);
 		add(lblTipo);
 		tipo.setFont(new Font("Dialog", Font.PLAIN, 21));
 
-		tipo.setBounds(459, 194, 149, 29);
+		tipo.setBounds(459, 190, 149, 29);
 		add(tipo);
 		
 		JLabel lblProveedor = new JLabel("Proveedor:");
 		lblProveedor.setForeground(Color.WHITE);
 		lblProveedor.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblProveedor.setBounds(347, 73, 113, 29);
+		lblProveedor.setBounds(347, 67, 113, 29);
 		add(lblProveedor);
 		
 		proveedor.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
 		proveedor.setColumns(10);
-		proveedor.setBounds(459, 72, 149, 30);
+		proveedor.setBounds(459, 66, 149, 30);
 		add(proveedor);
 		
 		JButton btnPedirNuevoProducto = new JButton("Pedir Nuevo Producto");
@@ -154,20 +157,56 @@ public class Panel5 extends JPanel {
 		btnPedirNuevoProducto.setFocusPainted(false);
 		btnPedirNuevoProducto.setBorder(new LineBorder(new Color(7, 54, 127), 2));
 		btnPedirNuevoProducto.setBackground(new Color(21, 101, 192));
-		btnPedirNuevoProducto.setBounds(363, 243, 245, 46);
+		btnPedirNuevoProducto.setBounds(363, 269, 245, 46);
 		add(btnPedirNuevoProducto);
 		
 		JLabel lblFechaDeVencimiento = new JLabel("Fecha de vencimiento:");
 		lblFechaDeVencimiento.setForeground(Color.WHITE);
 		lblFechaDeVencimiento.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblFechaDeVencimiento.setBounds(10, 244, 206, 29);
+		lblFechaDeVencimiento.setBounds(10, 278, 206, 29);
 		add(lblFechaDeVencimiento);
 		
 		textFechaVencimiento = new JTextField();
 		textFechaVencimiento.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
 		textFechaVencimiento.setColumns(10);
-		textFechaVencimiento.setBounds(226, 243, 111, 30);
+		textFechaVencimiento.setBounds(226, 277, 111, 30);
 		add(textFechaVencimiento);
+		
+		JLabel lblDemanda = new JLabel("Demanda: ");
+		lblDemanda.setForeground(Color.WHITE);
+		lblDemanda.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
+		lblDemanda.setBounds(10, 227, 98, 29);
+		add(lblDemanda);
+		
+		demanda = new JTextField();
+		demanda.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
+		demanda.setColumns(10);
+		demanda.setBounds(118, 226, 71, 30);
+		add(demanda);
+		
+		mantenerinventario = new JTextField();
+		mantenerinventario.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
+		mantenerinventario.setColumns(10);
+		mantenerinventario.setBounds(322, 226, 71, 30);
+		add(mantenerinventario);
+		
+		JLabel lblMantener = new JLabel("Mantener inventario: : ");
+		lblMantener.setForeground(Color.WHITE);
+		lblMantener.setFont(new Font("Roboto Medium", Font.ITALIC, 13));
+		lblMantener.setBounds(199, 229, 130, 29);
+		add(lblMantener);
+		
+		JLabel lblOrdenar = new JLabel("Ordenar: ");
+		lblOrdenar.setForeground(Color.WHITE);
+		lblOrdenar.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
+		lblOrdenar.setBounds(403, 227, 98, 29);
+		add(lblOrdenar);
+		
+		producirordenar = new JTextField();
+		producirordenar.setFont(new Font("Roboto Medium", Font.PLAIN, 21));
+		producirordenar.setColumns(10);
+		producirordenar.setBounds(511, 226, 97, 30);
+		add(producirordenar);
 		
 
 

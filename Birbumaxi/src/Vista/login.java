@@ -36,7 +36,7 @@ public class login extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 995, 700);
         contentPane = new JPanel();
-        contentPane.setBackground(new Color(255, 128, 0));
+        contentPane.setBackground(new Color(31, 205, 184));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setContentPane(contentPane);
@@ -116,7 +116,7 @@ public class login extends JFrame {
         contentPane.add(BotonIngresar);
         
         JLabel lblNewLabel_1 = new JLabel("");
-        lblNewLabel_1.setIcon(new ImageIcon("C:\\Documentos\\imag\\Imagenlogin.jpg"));
+        lblNewLabel_1.setIcon(new ImageIcon("C:\\Documentos\\imag\\Imagenlogin.png"));
         lblNewLabel_1.setBounds(614, 0, 372, 663);
         contentPane.add(lblNewLabel_1);
         
@@ -144,7 +144,7 @@ public class login extends JFrame {
         JRadioButton vercontrasena = new JRadioButton("Ver contraseña");
         vercontrasena.setFont(new Font("Roboto Light", Font.BOLD, 12));
         vercontrasena.setForeground(new Color(255, 255, 255));
-        vercontrasena.setBackground(new Color(255, 128, 0));
+        vercontrasena.setBackground(new Color(31, 205, 184));
         vercontrasena.setBounds(153, 523, 128, 21);
         contentPane.add(vercontrasena);
         
@@ -183,4 +183,3 @@ public class login extends JFrame {
     }
     
 }
-
