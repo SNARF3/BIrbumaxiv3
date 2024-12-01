@@ -176,7 +176,7 @@ public class Panel5 extends JPanel {
 		JLabel lblDemanda = new JLabel("Demanda: ");
 		lblDemanda.setForeground(Color.WHITE);
 		lblDemanda.setFont(new Font("Roboto Medium", Font.ITALIC, 21));
-		lblDemanda.setBounds(10, 227, 98, 29);
+		lblDemanda.setBounds(10, 227, 120, 29);
 		add(lblDemanda);
 		
 		demanda = new JTextField();
