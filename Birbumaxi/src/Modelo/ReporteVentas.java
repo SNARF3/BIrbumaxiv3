@@ -15,13 +15,18 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -69,8 +74,11 @@ public class ReporteVentas extends ReportePapa{
 	public ArrayList<DatosVentas> obtenerDatos (LocalDate inicio, LocalDate fin){
 		ArrayList<DatosVentas> inv = new ArrayList<>();
 		String consulta = "select pr.nombre, pr.categoria, sum(pd.subtotal) as summ\r\n"
-				+ "from productos as pr, producto_factura as pd\r\n"
+				+ "from productos as pr, producto_factura as pd, factura as fa\r\n"
 				+ "where pr.ID_Producto = pd.ID_producto\r\n"
+				+ "and fa.id_factura = pd.id_factura\r\n"
+				+ "and fa.fecha >= ?\r\n"
+				+ "and fa.fecha <= ?\r\n"
 				+ "group by pr.ID_producto\r\n"
 				+ "order by pr.categoria;";
 		conexionBD conec= new conexionBD();
@@ -185,12 +193,26 @@ public class ReporteVentas extends ReportePapa{
 
             document.add(table);
             
-            DefaultPieDataset dataset = new DefaultPieDataset();
+            document.add(espaciador);
+            document.add(espaciador);
+            
+            Map<String, Double> totalPorCategoria = new HashMap<>();
+
             for (DatosVentas d : inv) {
-                dataset.setValue(d.getTipo(), d.getGanancia());
+                totalPorCategoria.put(
+                    d.getTipo(),
+                    totalPorCategoria.getOrDefault(d.getTipo(), 0.0) + d.getGanancia()
+                );
+            }
+
+            // Llenar el dataset con las ganancias sumadas por categoría
+            DefaultPieDataset dataset = new DefaultPieDataset();
+            for (Map.Entry<String, Double> entry : totalPorCategoria.entrySet()) {
+                dataset.setValue(entry.getKey(), entry.getValue());
             }
             
-            JFreeChart chart = ChartFactory.createPieChart("Ganancias por Categoría", dataset, true, true, false);
+            JFreeChart chart = ChartFactory.createPieChart("Ventas por Categoría (Bs)", dataset, true, true, false);
+            
             PiePlot plot = (PiePlot) chart.getPlot();
             plot.setSectionPaint("Frutas", new Color(76, 175, 80));         // Verde
             plot.setSectionPaint("Verduras", new Color(139, 195, 74));      // Verde claro
@@ -200,6 +222,12 @@ public class ReporteVentas extends ReportePapa{
             plot.setSectionPaint("Dulces", new Color(255, 87, 34));         // Naranja
             plot.setSectionPaint("Limpieza", new Color(121, 85, 72));       // Marrón
             plot.setSectionPaint("Aseo Personal", new Color(156, 39, 176)); // Morado
+            
+            plot.setLabelGenerator(new StandardPieSectionLabelGenerator(
+            	    "{0}: {1} ({2})", // "{0}" es el nombre, "{1}" es el valor, "{2}" es el porcentaje
+            	    NumberFormat.getNumberInstance(), // Formato para el valor
+            	    new DecimalFormat("0.00%")       // Formato para el porcentaje
+            	));
             
             File chartFile = new File("chart.png");
             ChartUtils.saveChartAsPNG(chartFile, chart, 500, 400);

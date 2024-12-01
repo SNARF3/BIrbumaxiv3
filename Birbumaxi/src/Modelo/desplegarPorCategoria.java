@@ -15,7 +15,6 @@ public class desplegarPorCategoria {
 				+ "AND productos.ID_producto = pedidosReporte.ID_producto "
 				+ "AND pedidosReporte.stock > 0.0 "
 				+ "AND pedidosReporte.Estado = true "
-				+ "AND (productos.ID_producto LIKE '%"+ palabra+"%' OR productos.nombre LIKE '%"+palabra+"%') "
 				+ "group by productos.ID_producto;";
 		
 		conexionBD conec= new conexionBD();
