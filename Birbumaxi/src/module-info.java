@@ -10,4 +10,5 @@ module Birbumaxi {
 	requires itextpdf;
 	requires mail;
 	requires activation;
+	requires org.jfree.jfreechart;
 }

@@ -1,6 +1,8 @@
 package Modelo;
 
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Paint;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,6 +18,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -60,11 +68,11 @@ public class ReporteVentas extends ReportePapa{
 	
 	public ArrayList<DatosVentas> obtenerDatos (LocalDate inicio, LocalDate fin){
 		ArrayList<DatosVentas> inv = new ArrayList<>();
-		String consulta = "select persona.nombre, persona.NIT, DATE(factura.fecha) AS fechita, factura.total \r\n"
-				+ "from persona, factura \r\n"
-				+ "where persona.id_persona = factura.id_persona\r\n"
-				+ "and DATE(factura.fecha) >= ? and DATE(factura.fecha) <= ?\r\n"
-				+ "order by fechita;";
+		String consulta = "select pr.nombre, pr.categoria, sum(pd.subtotal) as summ\r\n"
+				+ "from productos as pr, producto_factura as pd\r\n"
+				+ "where pr.ID_Producto = pd.ID_producto\r\n"
+				+ "group by pr.ID_producto\r\n"
+				+ "order by pr.categoria;";
 		conexionBD conec= new conexionBD();
 		Connection conn= conec.conexion();
 		PreparedStatement ps= null;
@@ -77,17 +85,14 @@ public class ReporteVentas extends ReportePapa{
 			rs=ps.executeQuery();
 			int num = 1;
 			while(rs.next()) {
-				String nombre = rs.getString("nombre");
-                String nit = rs.getString("NIT");
-                Date fecha = rs.getDate("fechita");
-                LocalDate fechaLocal = fecha.toLocalDate();
-                fechaLocal = fechaLocal.plusDays(1);
-                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                String fechaActualStr = fechaLocal.format(formato);
-                double total = rs.getDouble("total");
+				String nombre = rs.getString("pr.nombre");
+				String[] cat = {"","Frutas","Verduras","Carnes","Lacteos","Cereales","Dulces","Limpieza","Aseo Personal"};
+                int categoria = rs.getInt("pr.categoria");
+                String cate = cat[categoria];
+                double total = rs.getDouble("summ");
                 BigDecimal bd = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
                 double totalRedondeado = bd.doubleValue();
-                DatosVentas ped = new DatosVentas(num, nombre, nit, fechaActualStr, totalRedondeado);
+                DatosVentas ped = new DatosVentas(num, nombre, cate, totalRedondeado);
                 inv.add(ped);
 				num++;
 			}
@@ -148,15 +153,14 @@ public class ReporteVentas extends ReportePapa{
             
             document.add(espaciador);
 
-            PdfPTable table = new PdfPTable(5);
+            PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
 
             Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
             addTableHeader(table, headerFont, "Número");
-            addTableHeader(table, headerFont, "NIT");
+            addTableHeader(table, headerFont, "Categoria");
             addTableHeader(table, headerFont, "Nombre");
-            addTableHeader(table, headerFont, "Fecha");
             addTableHeader(table, headerFont, "Total");
             
             ArrayList<DatosVentas> inv = new ArrayList<>();
@@ -164,9 +168,8 @@ public class ReporteVentas extends ReportePapa{
             
             for(DatosVentas d : inv) {
             	addTableCell(table, "" + d.getNumero());
-            	addTableCell(table, "" + d.getNit());
+            	addTableCell(table, "" + d.getTipo());
                 addTableCell(table, "" + d.getNombre());
-                addTableCell(table, d.getFecha());
                 addTableCell(table, "" + d.getGanancia());
             }
              
@@ -178,12 +181,37 @@ public class ReporteVentas extends ReportePapa{
             addTableCell(table, "TOTAL");
             addTableCell(table, "");
             addTableCell(table, "");
-            addTableCell(table, "");
             addTableCell(table, "" + totalRedondeado);
 
             document.add(table);
+            
+            DefaultPieDataset dataset = new DefaultPieDataset();
+            for (DatosVentas d : inv) {
+                dataset.setValue(d.getTipo(), d.getGanancia());
+            }
+            
+            JFreeChart chart = ChartFactory.createPieChart("Ganancias por Categoría", dataset, true, true, false);
+            PiePlot plot = (PiePlot) chart.getPlot();
+            plot.setSectionPaint("Frutas", new Color(76, 175, 80));         // Verde
+            plot.setSectionPaint("Verduras", new Color(139, 195, 74));      // Verde claro
+            plot.setSectionPaint("Carnes", new Color(244, 67, 54));         // Rojo
+            plot.setSectionPaint("Lacteos", new Color(33, 150, 243));       // Azul
+            plot.setSectionPaint("Cereales", new Color(255, 193, 7));       // Amarillo
+            plot.setSectionPaint("Dulces", new Color(255, 87, 34));         // Naranja
+            plot.setSectionPaint("Limpieza", new Color(121, 85, 72));       // Marrón
+            plot.setSectionPaint("Aseo Personal", new Color(156, 39, 176)); // Morado
+            
+            File chartFile = new File("chart.png");
+            ChartUtils.saveChartAsPNG(chartFile, chart, 500, 400);
+
+            // Agregar el gráfico al PDF
+            Image chartImage = Image.getInstance(chartFile.getAbsolutePath());
+            chartImage.scaleToFit(500, 400);
+            chartImage.setAlignment(Element.ALIGN_CENTER);
+            document.add(chartImage);
 
             document.close();
+            
             File pdfFile = new File(dest);
             if (pdfFile.exists()) {
                 if (Desktop.isDesktopSupported()) {

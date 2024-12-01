@@ -1,5 +1,5 @@
 package Vista;
-
+//ve a la linea 145
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -145,7 +145,8 @@ public class Panel5 extends JPanel {
 		btnPedirNuevoProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				productos prod = new productos();
-				if(prod.IngresoProducto(nombre.getText(),Double.parseDouble(precioCompra.getText()), Double.parseDouble(precioVenta.getText()), Double.parseDouble(stock.getText()), Double.parseDouble(demanda.getText()), textFechaVencimiento.getText(), proveedor.getText(), telefono.getText() ,comboBox.getSelectedIndex()+1, Double.parseDouble(mantenerinventario.getText()), Double.parseDouble(producirordenar.getText()) )) {
+				//las variables que tienes que agregar esta en rojo
+				if(prod.IngresoProducto(nombre.getText(),Double.parseDouble(precioCompra.getText()), Double.parseDouble(precioVenta.getText()), Double.parseDouble(stock.getText()), Double.parseDouble(demanda.getText()), textFechaVencimiento.getText(), proveedor.getText(), telefono.getText() ,comboBox.getSelectedIndex()+1, Double.parseDouble(mantenerinventario.getText()), Double.parseDouble(producirordenar.getText()), Integer.parseInt(tipoProducto) )) {
 					JOptionPane.showMessageDialog(null, "PRODUCTO AGREGADO CON EXITO!");
 				}else {
 					JOptionPane.showMessageDialog(null, "No se pudo agregar el producto :(");
