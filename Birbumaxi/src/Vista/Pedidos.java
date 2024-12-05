@@ -281,7 +281,7 @@ public class Pedidos extends JFrame {
                 lblCantidadRequerida.setBounds(353, 210, 205, 29);
                 contentPane.add(lblCantidadRequerida);
 
-                StockReq.setBackground(new Color(255, 255, 255));
+                StockReq.setBackground(new Color(196, 196, 196));
                 StockReq.setFont(new Font("Dialog", Font.BOLD, 21));
                 StockReq.setColumns(10);
                 StockReq.setBounds(539, 210, 166, 30);
