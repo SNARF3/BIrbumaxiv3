@@ -294,19 +294,19 @@ public class TeoriaDeInventarios extends JFrame {
         lblUnidadeslote.setBounds(432, 185, 106, 29);
         panel.add(lblUnidadeslote);
         
-        JLabel lblUnidades = new JLabel("unidades");
+        JLabel lblUnidades = new JLabel("unidades/mes");
         lblUnidades.setForeground(Color.WHITE);
         lblUnidades.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
         lblUnidades.setBounds(432, 224, 106, 29);
         panel.add(lblUnidades);
         
-        JLabel lblAociclo = new JLabel("año/ciclo");
+        JLabel lblAociclo = new JLabel("mes/ciclo");
         lblAociclo.setForeground(Color.WHITE);
         lblAociclo.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
         lblAociclo.setBounds(432, 265, 106, 29);
         panel.add(lblAociclo);
         
-        JLabel lblCicloa = new JLabel("ciclo/año");
+        JLabel lblCicloa = new JLabel("ciclo/mes");
         lblCicloa.setForeground(Color.WHITE);
         lblCicloa.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
         lblCicloa.setBounds(432, 304, 106, 29);
@@ -336,7 +336,7 @@ public class TeoriaDeInventarios extends JFrame {
         lblUnidades_1_1.setBounds(432, 462, 106, 29);
         panel.add(lblUnidades_1_1);
         
-        JLabel lblUnidades_1_1_1 = new JLabel("años");
+        JLabel lblUnidades_1_1_1 = new JLabel("meses");
         lblUnidades_1_1_1.setForeground(Color.WHITE);
         lblUnidades_1_1_1.setFont(new Font("Roboto Medium", Font.ITALIC, 15));
         lblUnidades_1_1_1.setBounds(432, 499, 106, 29);

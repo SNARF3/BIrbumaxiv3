@@ -114,7 +114,7 @@ public class EOQ {
                 double CTta = CTt * 12;
                 double CTcl = k + (c*Q) + ((h*(Q*Q))/(2*d)); // Costo total por ciclo
                 
-                double L = 0.25;
+                double L = T - 0.05;
                 double n = Math.floor(L / T);
                 double Le = L - (n*T);
                 double R = Le * d;
