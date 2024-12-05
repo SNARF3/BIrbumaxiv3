@@ -117,7 +117,7 @@ public class TeoriaDeColas extends JFrame {
         panel.add(cajeros);
 
         // Consulta para contar cuántos cajeros (empleados con cargo = 0) hay
-        String consultaCajeros = "SELECT COUNT(*) AS totalCajeros FROM empleados WHERE cargo = 2"; // Cambiar a 0 según el comentario
+        String consultaCajeros = "SELECT COUNT(*) AS totalCajeros FROM empleados WHERE cargo = 1 and estado = 1"; // Cambiar a 0 según el comentario
         conexionBD conec = new conexionBD();
         Connection conn = null;
         PreparedStatement ps = null;
