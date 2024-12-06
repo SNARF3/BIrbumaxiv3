@@ -100,7 +100,7 @@ public class teoriaColas {
     public static teoriaColas calcularTeoriaColas(int n) {
         // Parámetros promedio de un supermercado
         double tasaLlegada = 45;  // Tasa promedio de llegada de clientes por unidad de tiempo
-        double tasaServicio = 12; // Tasa promedio de servicio por cajero
+        double tasaServicio = 20; // Tasa promedio de servicio por cajero
     
         // Crear un objeto teoriaColas
         teoriaColas teoria = new teoriaColas(tasaLlegada, tasaServicio);
@@ -125,6 +125,11 @@ public class teoriaColas {
     private void aplicarTeoriaColas1() {
         // Utilizamos la fórmula M/M/1
         this.rho = tasaLlegada / tasaServicio; // Utilización del servidor
+        /*if (rho>=1) {
+            rho = 0.99;
+        }*/
+            
+
         this.po = 1 - rho;
         this.Ls = Math.round(rho / (1 - rho)); // Número promedio de clientes en el sistema
         this.Lq = Math.round((tasaLlegada * tasaLlegada) / (tasaServicio * (tasaServicio - tasaLlegada))); // Número promedio de clientes en la cola
@@ -144,6 +149,10 @@ public class teoriaColas {
         double m = tasaLlegada / tasaServicio;
 
         this.rho = tasaLlegada / (totalCajeros * tasaServicio); // Utilización del sistema
+        /*if (rho>=1){
+            rho = 0.99;
+        }*/
+            
         this.po = calcularP0(totalCajeros); // Probabilidad de que no haya clientes en el sistema
         this.Lq = Math.round((po * Math.pow(m, totalCajeros) * rho) / (factorial(totalCajeros) * (Math.pow((1 - rho), 2)))); // Número promedio de clientes en la cola
         this.Wq = Lq / tasaLlegada; // Tiempo promedio en la cola
