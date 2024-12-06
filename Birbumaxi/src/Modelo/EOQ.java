@@ -81,7 +81,7 @@ public class EOQ {
 // Función para calcular EOQ
     public static EOQ calcularEOQ(int idProductoParametro) {
         // Consulta para obtener los datos necesarios de la tabla productos dependiendo del id_producto
-        String consulta = "SELECT id_producto, nombre, precio_compra, producirOrdenar, MantenerInventario, Demanda " +
+        String consulta = "SELECT id_producto, nombre, precio_compra, producirOrdenar, MantenerInventario, Demanda, categoria " +
                         "FROM productos WHERE id_producto = ?";
         conexionBD conec = new conexionBD();
         Connection conn = conec.conexion();
@@ -102,6 +102,7 @@ public class EOQ {
                 double k = rs.getDouble("producirOrdenar");
                 double h = rs.getDouble("MantenerInventario");
                 double demanda = rs.getDouble("Demanda");
+                int categoria = rs.getInt("categoria");
 
                 // Calcular EOQ utilizando la fórmula
                 double Q = Math.sqrt((2 * demanda * k) / h);
@@ -114,7 +115,36 @@ public class EOQ {
                 double CTta = CTt * 12;
                 double CTcl = k + (c*Q) + ((h*(Q*Q))/(2*d)); // Costo total por ciclo
                 
-                double L = T - 0.05;
+                double L;
+                switch (categoria) {
+                    case 1: // Frutas
+                        L = 0.1 * T;
+                        break;
+                    case 2: // Verduras
+                        L = 0.2 * T;
+                        break;
+                    case 3: // Carnes
+                        L = 0.25 * T;
+                        break;
+                    case 4: // Lácteos
+                        L = 0.3 * T;
+                        break;
+                    case 5: // Cereales
+                        L = 0.4 * T;
+                        break;
+                    case 6: // Dulces
+                        L = 0.5 * T;
+                        break;
+                    case 7: // Productos de limpieza
+                        L = 0.6 * T;
+                        break;
+                    case 8: // Aseo personal
+                        L = 0.5 * T;
+                        break;
+                    default:
+                        L = 0.2 * T; // Valor por defecto si la categoría no coincide
+                }
+                
                 double n = Math.floor(L / T);
                 double Le = L - (n*T);
                 double R = Le * d;

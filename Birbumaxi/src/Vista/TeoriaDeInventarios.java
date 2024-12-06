@@ -147,15 +147,6 @@ public class TeoriaDeInventarios extends JFrame {
                     EOQ producto = EOQ.calcularEOQ(id);  // Llamar a la función calcularEOQ con el ID
                     // Mostrar los resultados en los campos de texto
                     TextProducto.setText(producto.getNombre());  // Cantidad óptima de pedido
-                    textQ.setText(String.format("%.2f", producto.getQ()));  // Cantidad óptima de pedido
-                    textD.setText(String.format("%.2f", producto.getD()));  // Demanda óptima
-                    textT.setText(String.format("%.2f", producto.getT()));  // Tiempo de ciclo
-                    textCiclosanio.setText(String.format("%.2f", producto.getN()));  // Número de ciclos al año
-                    textcostociclo.setText(String.format("%.2f", producto.getCTcl()));  // Costo total por ciclo
-                    texttm.setText(String.format("%.2f", producto.getCTt()));  // Costo total por mes
-                    textta.setText(String.format("%.2f", producto.getCTta()));  // Costo total por año
-                    textreorden.setText(String.format("%.2f", producto.getR()));  // Costo total por año
-                    texttiempoespera.setText(String.format("%.2f", producto.getLe()));  // Costo total por año
                 } else {
                     JOptionPane.showMessageDialog(null, "Por favor ingrese un ID.");
                 }
@@ -210,7 +201,7 @@ public class TeoriaDeInventarios extends JFrame {
         textT.setBounds(281, 265, 146, 29);
         panel.add(textT);
         
-        JLabel lblNumeroDeCiclos = new JLabel("Numero de ciclos al año:");
+        JLabel lblNumeroDeCiclos = new JLabel("Numero de ciclos al mes:");
         lblNumeroDeCiclos.setForeground(Color.WHITE);
         lblNumeroDeCiclos.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
         lblNumeroDeCiclos.setBounds(28, 301, 226, 29);
@@ -343,8 +334,35 @@ public class TeoriaDeInventarios extends JFrame {
         panel.add(lblUnidades_1_1_1);
         
         JButton calcular = new JButton("CALCULAR");
+        calcular.setForeground(Color.WHITE);
         calcular.setBackground(Color.GRAY);
         calcular.setBounds(330, 102, 120, 29);
         panel.add(calcular);
+
+
+
+
+
+        calcular.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int id = Integer.parseInt(textid.getText().trim()) ;  // Obtener el ID ingresado
+                if (id!=0) {
+                    EOQ producto = EOQ.calcularEOQ(id);  // Llamar a la función calcularEOQ con el ID
+                    // Mostrar los resultados en los campos de texto
+                    
+                    textQ.setText(String.format("%.2f", producto.getQ()));  // Cantidad óptima de pedido
+                    textD.setText(String.format("%.2f", producto.getD()));  // Demanda óptima
+                    textT.setText(String.format("%.2f", producto.getT()));  // Tiempo de ciclo
+                    textCiclosanio.setText(String.format("%.2f", producto.getN()));  // Número de ciclos al año
+                    textcostociclo.setText(String.format("%.2f", producto.getCTcl()));  // Costo total por ciclo
+                    texttm.setText(String.format("%.2f", producto.getCTt()));  // Costo total por mes
+                    textta.setText(String.format("%.2f", producto.getCTta()));  // Costo total por año
+                    textreorden.setText(String.format("%.2f", producto.getR()));  // Costo total por año
+                    texttiempoespera.setText(String.format("%.2f", producto.getLe()));  // Costo total por año
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor ingrese un ID.");
+                }
+            }
+        });
     }
 }

@@ -99,7 +99,7 @@ public class teoriaColas {
     // Método que aplica la teoría de colas dependiendo de la cantidad de cajeros
     public static teoriaColas calcularTeoriaColas(int n) {
         // Parámetros promedio de un supermercado
-        double tasaLlegada = 10;  // Tasa promedio de llegada de clientes por unidad de tiempo
+        double tasaLlegada = 45;  // Tasa promedio de llegada de clientes por unidad de tiempo
         double tasaServicio = 12; // Tasa promedio de servicio por cajero
     
         // Crear un objeto teoriaColas
@@ -196,7 +196,7 @@ public class teoriaColas {
         } 
         // Caso cuando n es mayor que el número de servidores
         else if (n > x.getS()) {
-            p_n = (Math.pow(m, x.getS()) * x.getPo()) / (factorial(x.getS()) * Math.pow(x.getS(), (n - x.getS()))); // Completar el cálculo
+            p_n = (Math.pow(m, n) * x.getPo()) / (factorial(x.getS()) * Math.pow(x.getS(), (n - x.getS()))); // Completar el cálculo
         } 
 
         return p_n;
